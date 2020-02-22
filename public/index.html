@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"
+      name="viewport"
+    />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>云逆行·新冠肺炎物资公益平台</title>
+    <style>
+      .amap-logo{
+            display: none !important;
+        }
+        .amap-copyright {
+            opacity:0 !important;
+        }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but viruses doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script> -->
+    <!-- <script src="../src/libs/aly.js"></script> -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=7c0113f349acadc12a21540f719494df&plugin=AMap.Geocoder,AMap.Geolocation"></script> 
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+  //   console.log(wx)
+  //   // $.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET",(res)=>{
+  //   //   console.log(res)
+  //   // })
+  //   wx.config({
+  //     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+  //     appId: 'wxc941dba7ff69275c', // 必填，公众号的唯一标识
+  //     noncestr:'ccba8ebe62ab4886',//必填，生成签名的随机串
+  //     timestamp:1582026603,//必填，生成签名的时间戳
+  //     signature:'a2692799f2587a2d2bda14412b8352ebe2206b67',//必填，签名
+  //     jsApiList: ["menuItem:share:appMessage",'menuItem:share:timeline'] // 必填，需要使用的JS接口列表
+  //   });
+  //   wx.ready(function () {
+  //     console.log(12)
+  //        //需在用户可能点击分享按钮前就先调用
+  //   wx.updateAppMessageShareData({ 
+  //     title: '123', // 分享标题
+  //     link: 'https://medicalsupplies.sitiits.com/visur/?from=singlemessage#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+  //     imgUrl: 'http://special.anlaiye.com/theme/v1/h5/new_users/styles/images/share.png', // 分享图标
+  //     success: function (ews) {
+  //       // 设置成功
+  //       console.log(ews)
+  //       callback();
+  //     },
+  //     error: function (ews) {
+  //       // 设置成功
+  //       console.log(ews)
+  //     },
+      
+  //   })
+
+
+
+
+  //   wx.onMenuShareAppMessage({
+  //     title: '111', // 分享标题
+  //     desc: '测试', // 分享描述
+  //     link: 'https://medicalsupplies.sitiits.com/visur/?from=singlemessage#/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+  //     imgUrl: 'http://special.anlaiye.com/theme/v1/h5/new_users/styles/images/share.png', // 分享图标
+  //     type: '', // 分享类型,music、video或link，不填默认为link
+  //     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+  //     success: function () {
+  //       // 用户点击了分享后执行的回调函数
+  //     }
+  //   })
+  // });
+  </script>
+</html>
