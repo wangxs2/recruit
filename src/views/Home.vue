@@ -2,9 +2,22 @@
   <div class="home">
     <van-nav-bar
       title="招聘直通车"
-      fixed
+      style="height:44px;font-size:18px;color:#333333"
       @click-left="onClickLeft"
     />
+    <div class="detail">
+      <div class="content"></div>
+      <div class="content-bottom">
+        <div class="feihua">
+          <div style="color:#222222;font-size:23px">描述文案描述文案</div>
+          <div  style="color:#666666;font-size:14px">描述文案</div>
+        </div>
+        <div class="btn">
+          <div class="btn-small" style="margin-right:30px" @click="$router.push('/about')">我要招人</div>
+          <div class="btn-small">我要应聘</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,5 +51,43 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  .detail{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .content{
+      flex: 1;
+      // background: greenyellow;
+    }
+    .content-bottom{
+      width: 100%;
+      height: 260px;
+      box-sizing: border-box;
+      padding-bottom: 64px;
+      font-size: 16px;
+      color: #ffffff;
+      .feihua{
+        box-sizing: border-box;
+        padding: 40px 0px;
+        text-align: center;
+      }
+      .btn{
+        display: flex;
+        justify-content: center;
+        .btn-small{
+          box-sizing: border-box;
+          padding: 14px 31px;
+          background:rgba(255,165,37,1);
+          border-radius:8px;
+          transition: transform 100ms ease-out
+        }
+        .btn-small:hover{
+          transform: scale(1.02)
+        }
+      }
+      
+    }
+  }
 }
 </style>
