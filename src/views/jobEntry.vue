@@ -324,7 +324,6 @@ export default {
     }else{
       this.compayObj=this.$store.state.companymsg
       if(this.compayObj){
-        // this.addForm.entId=this.compayObj.entId
         this.addForm.entAddress=this.compayObj.entAddress
         this.addForm.contactPpl=this.compayObj.contactName
         this.addForm.contactTel=this.compayObj.tel
