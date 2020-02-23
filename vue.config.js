@@ -14,8 +14,8 @@ module.exports = {
     proxy: {
       '/recruitassemble': {
         // target: 'http://47.100.200.255:9966/kindnessplatform', // 线上
+        // target: 'http://47.100.200.255:19955/kindnessplatform',  // 测试
         target: 'http://47.100.200.255:19999/recruitassemble',  // 测试
-        // target: 'https://medicalsupplies.sitiits.com/kindnessplatform',  // 测试
         changeOrigin: true,
         pathRewrite: {
           '^/recruitassemble': '/'

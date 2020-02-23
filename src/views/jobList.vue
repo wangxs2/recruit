@@ -8,21 +8,21 @@
      <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
     </van-nav-bar>
     <div class="detail">
-        <van-swipe-cell v-for="(item,index) in zhwList" :key="index">
+        <van-swipe-cell v-for="(item,index) in $store.state.saSubdata" :key="index">
             <div class="iteam-box">
                 <div class="one-list">
-                    <div>{{item.name}}</div>
-                    <div style="color:#F16458;">3000-5000</div>
+                    <div>{{item.postName}}</div>
+                    <div style="color:#F16458;">{{item.minSalary}}</div>
                 </div>
                 <div class="two-list">
-                    <span>上海</span><span>1-3年</span><span>大专</span>
+                    <span>上海</span><span>{{item.workExperience}}</span><span>{{item.minEducation}}</span>
                 </div>
                 <div class="three-list">
-                    <span>五险一金</span><span>交通补助</span><span>餐补</span>
+                    <span v-for="(iteam,index) in item.fulime" :key="index">{{iteam}}</span>
                 </div>
                 <div class="four-list">
                     <img width="30" height="30" src="../assets/image/addre.png">
-                    <div style="margin:0 4px">道合盛(上海)环保科技有限公司</div>
+                    <div style="margin:0 4px">{{item.entAddress}}</div>
                     <div class="recompy">认证企业</div>
                 </div>
             </div>
@@ -62,7 +62,7 @@ export default {
     }
   },
   created() {
-    
+    console.log(this.$store.state.saSubdata)
   },
  mounted () {
  
