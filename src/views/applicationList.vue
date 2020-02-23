@@ -8,13 +8,13 @@
      <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
     </van-nav-bar>
     <div class="searchrow">
-        <div class="sanjiao"><span style="margin-right:10px;font-size:15px">城市</span><div class="zj-topleft"></div></div>
+        <div class="sanjiao" @click="showPicker=true"><span style="margin-right:10px;font-size:15px">城市</span><div class="zj-topleft"></div></div>
         <div> 
             <van-search
             v-model="value"
             shape="round"
             background="#ffffff"
-            placeholder="输入企业名称/岗位名称"
+            placeholder="输入企业/岗位名称"
             />
         </div>
         <div class="dwnum"><van-icon name="filter-o" />筛选 <div class="num">1</div></div>
@@ -47,18 +47,39 @@
         </div>
      
     </div>
+    <van-popup v-model="showPicker" position="bottom">
+        <van-picker show-toolbar  :columns="columns" @cancel="showPicker=false" @confirm="onConfirm" @change="onChange" />
+    </van-popup>
     
   </div>
 </template>
 
 <script>
- 
+ import json from "@/libs/city_code.json"
 export default {
   name: "about",
   components:{},
   data() {
     return {
-        value:'',
+    columns:[
+        {
+            values: '',
+            className: 'column1'
+        },
+        {
+            values: '',
+            className: 'column2',
+            defaultIndex: 0
+        },
+      ],
+    value:'',
+    proCity:'',
+    allCity:json, // 省市数据
+    form:{
+        province:'',
+        city:''
+    },
+    showPicker:false,
       zhwList:[
           {
               name:"普工"
@@ -73,9 +94,44 @@ export default {
     
   },
  mounted () {
+     this.columns[0].values = Object.values(this.allCity).map(function(e){
+        return {text:e.name}
+    })
+    // 默认展示二级的数据
+    if (this.allCity[0].city){
+        this.columns[1].values = Object.values(this.allCity[0].city).map(function(e){
+            return {text:e.name}
+        })
+    }
  
   },
   methods:{ 
+    onConfirm(value){
+        console.log(value)
+        this.proCity=value[0].text+value[1].text
+        this.showPicker=false
+        this.form.province=value[0].text
+        this.form.city=value[1].text
+    },
+    onChange(picker, values,index){
+        picker.setColumnValues(1,this.cityDate(this.allCity,values[0].text))
+        this.form.proCity=values
+    }, 
+    cityDate(data,province){
+        var x=[]
+        data.forEach(function(res){
+            if (res.city){
+                if(res.name == province){
+                    for (let i = 0; i < res.city.length; i++) {
+                        let obj = {}
+                        obj.text = res.city[i].name
+                        x.push(obj);
+                    }
+                }
+            }
+        })
+        return x
+    },
     onClickLeft(){
       this.$router.push("/")
     },

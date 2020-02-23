@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     companymsg:{},
-    saSubdata:[]
+    saSubdata:[],
+    onedata:[],
+    twodata:[],
   },
   mutations: {
   },

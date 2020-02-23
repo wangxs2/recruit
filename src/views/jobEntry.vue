@@ -26,6 +26,7 @@
             show-toolbar
             :columns="columns"
             @confirm="onConfirm"
+            @change="onChange"
             @cancel="showPicker = false"
         />
         </van-popup>
@@ -125,12 +126,17 @@
         </van-field>
 
          <van-field
+          readonly
+          clickable
           v-model="addForm.ageRange"
           name="ageRange"
+          right-icon="arrow"
           label="年龄要求"
           placeholder="年龄要求"
+          @click="showPicker7 = true"
           :rules="[{ required: true, message: '请填写年龄要求' }]"
         />
+        <van-action-sheet v-model="showPicker7" :actions="actions3" @select="onSelect3" />
          <van-field
             readonly
             clickable
@@ -205,6 +211,8 @@
 </template>
 
 <script>
+const onedata=[]
+const twodata=["采购", "进出口贸易", "其他采购/贸易职位"]
 export default {
   name: "about",
   components: {},
@@ -253,14 +261,8 @@ export default {
       value: '',
       value1:[],
       columns: [
-        {
-            text:'高级',
-            id:1
-        },
-        {
-            text:'中级',
-            id:1
-        }
+       { values: ["采购/贸易", "产品", "传媒", "房地产/建筑", "服务业", "高级管理", "供应链/物流", "管培生/储备干部", "技术", "教育培训", "金融", "旅游", "其他", "人事/财务/行政", "设计", "生产制造", "市场", "销售", "医疗健康", "运营", "咨询/翻译/法律"] },
+       { values: twodata }
       ],//职位类别
       showPicker: false,//职位类别
       columns1: [
@@ -287,30 +289,76 @@ export default {
       showPicker2: false,//月薪
       showPicker3: false,//福利待遇
        actions2: [
-        { name: '一年以下' },
-        { name: '1-3年' },
-        { name: '3-5年' },
-        { name: '5年以上' },
-        { name: '不限' }
+        { name: '一年以下',id:1 },
+        { name: '1-3年',id:2 },
+        { name: '3-5年',id:3 },
+        { name: '5年以上',id:4 },
+        { name: '不限',id:0 }
       ],//工作年限
       showPicker5: false,//工作年限
       showPicker6: false,//学历要求
-      fuliList:["五险一金","包吃","包住","免费班车","加班补助","周末双休","年底双薪","员工旅游","带薪年假","年终分红","绩效奖","免费班车","节日福利","弹性工作","定期体检"],
+      fuliList:["五险一金","包吃","包住","加班补助","周末双休","年底双薪","员工旅游","带薪年假","年终分红","绩效奖","免费班车","节日福利","弹性工作","定期体检"],
     actions1: [
-        { name: '初中及以上' },
-        { name: '高中及以上' },
-        { name: '大专及以上' },
-        { name: '本科及以上' },
-        { name: '不限' }
-      ]
+        { name: '初中及以上',id:1 },
+        { name: '高中及以上',id:2 },
+        { name: '大专及以上',id:3 },
+        { name: '本科及以上',id:4 },
+        { name: '不限',id:0 }
+      ],
+      actions3: [
+        { name: '18-25岁',id:1 },
+        { name: '25-35岁',id:2 },
+        { name: '35-60岁',id:3 },
+        { name: '不限',id:0 }
+      ],//年龄要求
+      showPicker7: false,//年龄要求
     };
     
   },
   created() {
-      console.log(this.$store.state.companymsg)
+    
+    
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+    //   this.getAllmenu()
+    })
+      
+  },
   methods: {
+    getAllmenu(){
+        this.$fetchGet("position/getFirstType", {
+            firstType:''
+        }).then(res => {
+            this.onedata=res.data
+            console.log(this.onedata)
+            this.$fetchGet("position/getSecondType", {
+                firstType:res.data[0],
+                secondType:'',
+            }).then(data => {
+                this.twodata=data.data
+            })
+        })
+    },
+    onChange(picker, values) {
+        console.log(values)
+        console.log(picker)
+        this.$fetchGet("position/getSecondType", {
+            firstType:values[0],
+            secondType:'',
+        }).then(data => {
+            this.twodata=data.data
+            picker.setColumnValues(1, data.data);
+             this.$fetchGet("position/getJobs", {
+                firstType:values[0],
+                secondType:values[1],
+                position:'',
+            }).then(data => {
+                // this.twodata=data.data
+            })
+        })
+        
+    },
     onClickLeft() {
         this.isshow=true
     //   this.$router.push("/");
@@ -424,6 +472,12 @@ export default {
       // 可以通过 close-on-click-action 属性开启自动收起
       this.showPicker5 = false;
       this.addForm.workExperience=item.name
+    },
+    onSelect3(item) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      this.showPicker7 = false;
+      this.addForm.ageRange=item.name
     },
     subquwd(val){
         console.log(val)
