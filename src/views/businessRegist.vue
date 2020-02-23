@@ -42,6 +42,7 @@
             placeholder="企业地址"
             :rules="[{ required: true, message: '请填写企业地址' }]"
             />
+            <van-icon name="location-o" size="18" color="#FFA525" @click="positionAddress"/>
         </div>
         <div class="input-wrapper">
             <span class="label-title">企业类型</span>
@@ -110,6 +111,7 @@
             <span class="label-title">备注</span>
             <van-field
             v-model="form.desc"
+            type="textarea"
             name="备注"
             placeholder="备注"
             :rules="[{ required: true, message: '请填写备注' }]"
@@ -204,6 +206,31 @@ export default {
  
   },
   methods:{ 
+    positionAddress(){
+        
+      let geolocation = new AMap.Geolocation({
+        enableHighAccuracy: true, //是否使用高精度定位，默认:true
+        timeout: 10000, //超过10秒后停止定位，默认：无穷大
+        maximumAge: 0, //定位结果缓存0毫秒，默认：0
+        convert: true, //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+        showButton: true, //显示定位按钮，默认：true
+        buttonPosition: "RB", //定位按钮停靠位置，默认：'LB'，左下角
+        buttonOffset: new AMap.Pixel(10, 20), //定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+        showMarker: false, //定位成功后在定位到的位置显示点标记，默认：true
+        showCircle: true, //定位成功后用圆圈表示定位精度范围，默认：true
+        panToLocation: true, //定位成功后将定位到的位置作为地图中心点，默认：true
+        useNative: true,
+        zoomToAccuracy: true //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+      });
+      geolocation.getCurrentPosition((status, result) => {
+        if(status=='complete'){
+            console.log(result)
+            this.form.address=result.formattedAddress
+        }else{
+          this.$toast("获取当前位置失败");
+        }
+      });
+    },
     onClickLeft(){
       this.$router.push("/")
     },
@@ -288,6 +315,8 @@ export default {
 }
 .van-cell{
     padding:0;
+    font-size:16px;
+    color:#333;
 }
 .van-cell:not(:last-child)::after{
     border:0;
@@ -313,7 +342,10 @@ export default {
 
             }
             &.input-deser{
-                height:78px;
+                display:flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding:17px 13px;
             }
             .label-title{
                 width: 70px;
