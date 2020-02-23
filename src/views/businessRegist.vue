@@ -8,12 +8,12 @@
      <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
     </van-nav-bar>
     <div class="form-wrapper">
-      <van-form @submit="onSubmit">
+      <van-form @submit="onSubmit" @failed="onFailed">
         <div class="input-wrapper">
             <span class="label-title">所在省市</span>
             <van-field
             v-model="proCity"
-            name="所在省市"
+            name="proCity"
             readonly
             placeholder="所在省市"
             :rules="[{ required: true, message: '请选择所在省市' }]"
@@ -29,7 +29,7 @@
             <span class="label-title">企业名称</span>
             <van-field
             v-model="form.componyName"
-            name="企业名称"
+            name="componyName"
             placeholder="企业名称"
             :rules="[{ required: true, message: '请填写企业名称' }]"
             />
@@ -38,7 +38,7 @@
             <span class="label-title">企业地址</span>
             <van-field
             v-model="form.address"
-            name="企业地址"
+            name="address"
             placeholder="企业地址"
             :rules="[{ required: true, message: '请填写企业地址' }]"
             />
@@ -48,7 +48,7 @@
             <span class="label-title">企业类型</span>
             <van-field
             v-model="form.componyType"
-            name="企业类型"
+            name="componyType"
             readonly
             placeholder="企业类型"
             :rules="[{ required: true, message: '请选择企业类型' }]"
@@ -64,7 +64,7 @@
             <span class="label-title">所属行业</span>
             <van-field
             v-model="form.componyJob"
-            name="所属行业"
+            name="componyJob"
             readonly
             placeholder="所属行业"
             :rules="[{ required: true, message: '请选择所属行业' }]"
@@ -80,7 +80,7 @@
             <span class="label-title">联系人</span>
             <van-field
             v-model="form.linkPeople"
-            name="联系人"
+            name="linkPeople"
             placeholder="联系人"
             :rules="[{ required: true, message: '请填写联系人' }]"
             />
@@ -89,30 +89,38 @@
             <span class="label-title">联系电话</span>
             <van-field
             v-model="form.linkTel"
-            name="联系电话"
+            name="linkTel"
             placeholder="联系电话"
-            :rules="[{ required: true, message: '请填写联系电话' }]"
+            :rules="phoneRules"
             />
         </div>
         <div class="input-wrapper">
             <span class="label-title">是否认证</span>
-            <van-radio-group v-model="form.renzheng" direction="horizontal">
-                <van-radio name="1">单选框 1</van-radio>
-                <van-radio name="2">单选框 2</van-radio>
-            </van-radio-group>
+            <van-field name="renzheng">
+                <template #input>
+                    <van-radio-group v-model="form.renzheng" direction="horizontal">
+                        <van-radio name="1">是</van-radio>
+                        <van-radio name="2">否</van-radio>
+                    </van-radio-group>
+                </template>
+            </van-field>
         </div>
         <div class="input-wrapper upload-img">
             <span class="label-title">营业执照</span>
-            <van-uploader v-model="form.uploadImg" multiple>
-                <van-button icon="photo" type="primary">上传文件</van-button>
-            </van-uploader>
+            <van-field name="uploadImg" :rules="uploadImgRules">
+                <template #input>
+                    <van-uploader v-model="form.uploadImg" multiple >
+                        <van-button icon="photo" type="primary">上传文件</van-button>
+                    </van-uploader>
+                </template>
+            </van-field>
         </div>
         <div class="input-wrapper input-deser">
             <span class="label-title">备注</span>
             <van-field
             v-model="form.desc"
             type="textarea"
-            name="备注"
+            name="desc"
             placeholder="备注"
             :rules="[{ required: true, message: '请填写备注' }]"
             />
@@ -154,6 +162,13 @@ export default {
   name: "businessRegist",
   components:{},
   data() {
+    this.phoneRules = [
+      { required: true, message: '请输入手机号' },
+      { validator: this.phoneValidator, message: '手机号格式错误' },
+    ];
+    this.uploadImgRules = [
+      { required: true, message: '请上传营业执照'},
+    ];
     return {
       allCity:json,
       showPicker:false,
@@ -231,11 +246,18 @@ export default {
         }
       });
     },
+    phoneValidator(val) {
+      return /^[\d\-]+$/g.test(val);
+    },
     onClickLeft(){
       this.$router.push("/")
     },
     onSubmit(values) {
       console.log('submit', values);
+    },
+    onFailed(values){
+        this.$toast("请填写完整信息")
+      console.log('failed', values);
     },
     onConfirm(value){
         console.log(value)
@@ -245,8 +267,7 @@ export default {
         this.form.city=value[1].text
     },
     onChange(picker, values,index){
-          picker.setColumnValues(1,this.cityDate(this.allCity,values[0].text))
-          
+        picker.setColumnValues(1,this.cityDate(this.allCity,values[0].text))
         this.form.proCity=values
     }, 
     onCancel(){
@@ -261,7 +282,6 @@ export default {
     }, 
     onCancel1(){
         this.showPicker1=false
-
     },
     onConfirm2(value){
         this.form.componyJob=value
