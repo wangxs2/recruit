@@ -9,7 +9,7 @@
     </van-nav-bar>
     <div class="detail">
         <van-swipe-cell v-for="(item,index) in $store.state.saSubdata" :key="index">
-            <div class="iteam-box">
+            <div class="iteam-box" @click="editmsg(item,index)">
                 <div class="one-list">
                     <div>{{item.postName}}</div>
                     <div style="color:#F16458;">{{item.minSalary}}</div>
@@ -38,8 +38,8 @@
      
     </div>
     <div class="btn-bottom">
-        <div class="btn" style="color:#FFA525">继续添加</div>
-        <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff">提交</div>
+        <div class="btn" style="color:#FFA525" @click="goonlist">继续添加</div>
+        <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff" @click="submit">提交</div>
     </div>
   </div>
 </template>
@@ -71,9 +71,32 @@ export default {
     onClickLeft(){
       this.$router.push("/")
     },
-     onSubmit(values) {
-      console.log('submit', values);
+    submit() {
+      this.$fetchPost("release/insertList", this.$store.state.saSubdata, "json").then(res=>{
+
+      })
     },
+    //编辑
+    editmsg(row,index){
+       this.$router.push({
+          path: "/jobEntry",
+          query: {
+            istype: "edit",
+            sizeForm:row,
+            editindex:index
+          }
+        });
+        
+    },
+    //继续添加
+    goonlist(){
+      this.$router.push({
+          path: "/jobEntry",
+          query: {
+            istype: "add"
+          }
+        });
+    }
   }
 };
 </script>
@@ -117,10 +140,11 @@ export default {
   }
   .detail {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
     overflow: hidden;
     overflow-y: scroll;
+    margin-bottom:49px;
     .iteam-box{
         background:#ffffff;
         margin-bottom:10px;
@@ -143,11 +167,15 @@ export default {
         }
         .three-list{
             margin-bottom:10px;
+          display: flex;
+          flex-wrap:wrap;
+           justify-content:flex-start;
             span{
                 font-size:12px;
                 background:rgba(233,241,255,1);
                 border-radius:3px;
-                margin-right:10px;
+                margin-right:6px;
+                margin-top:6px;
                 color:#4B9BFE;
                 padding:3px 6px;
             }

@@ -140,8 +140,8 @@
          <van-field
             readonly
             clickable
-            name="minEducation"
-            :value="addForm.minEducation"
+            name="minEducationName"
+            :value="addForm.minEducationName"
             label="学历要求"
             right-icon="arrow"
             placeholder="点击选择学历要求"
@@ -173,21 +173,21 @@
           v-model="addForm.contactPpl"
           name="联 系 人"
           label="联 系 人"
-          placeholder="联系人(多个联系人逗号隔开)"
+          placeholder="联系人"
           :rules="[{ required: true, message: '请填写联系人' }]"
         />
           <van-field
           v-model="addForm.contactTel"
           name="联系电话"
           label="联系电话"
-          placeholder="联系电话(多个联系电话逗号隔开)"
+          placeholder="联系电话"
           :rules="[{ required: true, message: '请填写联系电话' }]"
         />
        
         <div style="margin-top:30px">
-          <van-grid :column-num="submitArr.length>0&&this.idIndex>0?3:2">
-            <van-grid-item v-if="submitArr.length>0&&this.idIndex>0" @click="upSubmit" text="上一个" />
-            <van-grid-item  text="" @click="subquwd('next')">
+          <van-grid :column-num="submitArr.length>0&&this.idIndex>0?3:(istype!=='add'||istype!=='edit')?1:2">
+            <van-grid-item v-if="submitArr.length>0&&this.idIndex>0&&(istype!=='add'||istype!=='edit')" @click="upSubmit" text="上一个" />
+            <van-grid-item v-if="istype!=='add'&&istype!=='edit'" text="" @click="subquwd('next')">
                 <van-button style="width:100%;height:100%;border:none;color:#FFA525;font-size:16px;" type="default">下一个</van-button>
             </van-grid-item>
             <van-grid-item  text="" @click="subquwd('sub')">
@@ -230,8 +230,10 @@ export default {
         entId:'',// 企业id 
         postId:'',// 职位id 
         recruitNum:'',//招聘人数(单位:人)
+        salary:'',//月薪
         ageRange:'',//年龄要求 
         minEducation:'',//最低文化程度要求
+        minEducationName:'',//最低文化程度要求
         otherRequire:'',//其他条件
         postDscrpt:'',//职位描述
         minSalary:'',//最低工资待遇(单位:元) 
@@ -265,17 +267,17 @@ export default {
        { values: twodata }
       ],//职位类别
       showPicker: false,//职位类别
-      columns1: [],//职位名称
+      columns1: [{text:"采购",postId:567},{text:"采购工程师",postId:572},{text:"采购经理",postId:569},{text:"采购主管",postId:573},{text:"采购助理",postId:574},{text:"采购专员","postId":570},{text:"采购总监",postId:568},{text:"买手",postId:571}],//职位名称
       showPicker1: false,//职位名称
       actions: [
-        { name: '1000以下' },
-        { name: '1000-2000' },
-        { name: '3000-5000' },
-        { name: '5000-8000' },
-        { name: '8000-12000' },
-        { name: '12000-20000' },
-        { name: '20000以上' },
-        { name: '面议' }
+        { name: '1000以下',id:1 },
+        { name: '1000-2000',id:2 },
+        { name: '3000-5000' ,id:3},
+        { name: '5000-8000',id:4 },
+        { name: '8000-12000' ,id:5},
+        { name: '12000-20000',id:6 },
+        { name: '20000以上',id:7 },
+        { name: '面议' ,id:0}
       ],//月薪
       showPicker2: false,//月薪
       showPicker3: false,//福利待遇
@@ -290,11 +292,11 @@ export default {
       showPicker6: false,//学历要求
       fuliList:["五险一金","包吃","包住","加班补助","周末双休","年底双薪","员工旅游","带薪年假","年终分红","绩效奖","免费班车","节日福利","弹性工作","定期体检"],
     actions1: [
-        { name: '初中及以上',id:1 },
-        { name: '高中及以上',id:2 },
-        { name: '大专及以上',id:3 },
-        { name: '本科及以上',id:4 },
-        { name: '不限',id:0 }
+        { name: '初中及以上',id:'middle' },
+        { name: '高中及以上',id:'high' },
+        { name: '大专及以上',id:'junior' },
+        { name: '本科及以上',id:'college' },
+        { name: '不限',id:'unlimited' }
       ],
       actions3: [
         { name: '18-25岁',id:1 },
@@ -303,14 +305,32 @@ export default {
         { name: '不限',id:0 }
       ],//年龄要求
       showPicker7: false,//年龄要求
+      compayObj:{},
+      istype:"",
+      editindex:"",
     };
     
   },
   created() {
-    
-    
+    this.istype=this.$route.query.istype
+    if(this.istype=="add"){
+      this.submitArr=this.$store.state.saSubdata
+    }else if(this.istype=="edit"){
+      this.addForm=this.$route.query.sizeForm
+      this.editindex=this.$route.query.editindex
+    }else{
+      this.compayObj=this.$store.state.companymsg
+      if(this.compayObj){
+        this.addForm.entId=this.compayObj.entId
+        this.addForm.entAddress=this.compayObj.entAddress
+        this.addForm.contactPpl=this.compayObj.contactName
+        this.addForm.contactTel=this.compayObj.tel
+      }
+    }
   },
   mounted() {
+    
+   
   },
   methods: {
     getAllmenu(){
@@ -336,11 +356,12 @@ export default {
             secondType:'',
         }).then(data => {
             this.twodata=data.data
+            this.columns1=[]
              this.$fetchGet("position/getJobs", {
                     firstType:values[0],
                     secondType:index==0?this.twodata[0]:values[1],
                     position:'',
-                }).then(res => {
+              }).then(res => {
                     // this.twodata=data.data
                     if(res.data){
                        res.data.forEach(iteam=>{
@@ -349,7 +370,7 @@ export default {
                       })
                     }
                    
-                })
+              })
             picker.setColumnValues(1, data.data);
             
         })
@@ -373,10 +394,12 @@ export default {
         entId:'',// 企业id 
         postId:'',// 职位id 
         recruitNum:'',//招聘人数(单位:人)
-        ageRange:'',//年龄要求 
+        ageRange:'',//年龄要求
+        minEducationName:'',//最低文化程度要求
         minEducation:'',//最低文化程度要求
         otherRequire:'',//其他条件
         postDscrpt:'',//职位描述
+        salary:'',//月薪
         minSalary:'',//最低工资待遇(单位:元) 
         maxSalary:'',//最低工资待遇(单位:元)
         isNegotiable:'',//面议(单位:元)  
@@ -384,9 +407,9 @@ export default {
         workShift:'三班倒',//工作班制
         socialBenefit:'',// 福利待遇
         workExperience:'',//工作年限(默认0不限) 
-        contactPpl:'',//联系人(多个用;分隔)  
-        contactTel:'',//联系电话(多个用;分隔)
-        entAddress:'',//公司地址
+        contactPpl:this.compayObj.contactName,//联系人(多个用;分隔)  
+        contactTel:this.compayObj.tel,//联系电话(多个用;分隔)
+        entAddress:this.compayObj.entAddress,//公司地址
         remark:'',//备注
         isPub:'',//是否发布(0否;1是)  
         inputTime:'',// 录入时间 
@@ -419,9 +442,14 @@ export default {
           console.log(this.submitArr)
       }else{
           console.log("submit", "确定");
-          this.submitArr.push(this.addForm);
-          this.$store.state.saSubdata=this.submitArr
+          
           console.log(this.$store.state.saSubdata)
+          if(this.istype=="edit"){
+            this.$store.state.saSubdata[this.editindex]=this.addForm
+          }else{
+            this.submitArr.push(this.addForm);
+            this.$store.state.saSubdata=this.submitArr
+          }
           this.$router.push('/jobList')
       }
     },
@@ -456,13 +484,28 @@ export default {
       // 可以通过 close-on-click-action 属性开启自动收起
       console.log(item)
       this.showPicker2 = false;
-      this.addForm.minSalary=item.name
+      if(item.id==0){
+        this.addForm.minSalary=''
+        this.addForm.maxSalary=''
+      }else if(item.id==1){
+        this.addForm.minSalary=0
+        this.addForm.maxSalary=1000
+      }else if(item.id==7){
+        this.addForm.minSalary=20000
+        this.addForm.maxSalary=''
+      }else{
+        let str=item.name.split("-")
+        this.addForm.minSalary=str[0]
+        this.addForm.maxSalary=str[1]
+      }
+      this.addForm.salary=item.id
     },
      onSelect1(item) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       this.showPicker6 = false;
-      this.addForm.minEducation=item.name
+      this.addForm.minEducationName=item.name
+      this.addForm.minEducation=item.id
     },
      onSelect2(item) {
       // 默认情况下点击选项时不会自动收起

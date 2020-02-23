@@ -39,10 +39,7 @@ export default {
 
       },
       publistJob(){
-          this.$store.state.companymsg={
-              name:'小花',
-              date:'现在'
-          }
+          
           this.$router.push("/jobEntry")
       }
   }
