@@ -57,7 +57,7 @@
             <van-icon name="arrow" size="16"/>
             
             <van-popup v-model="showPicker1" position="bottom">
-                <van-picker show-toolbar  :columns="columns1" @cancel="onCancel1" @confirm="onConfirm1" @change="onChange1" />
+                <van-picker show-toolbar title="企业类型" confirm-button-text="完成"  :columns="columns1" @cancel="onCancel1" @confirm="onConfirm1" @change="onChange1" />
             </van-popup>
         </div>
         <div class="input-wrapper">
@@ -73,7 +73,7 @@
             <van-icon name="arrow" size="16"/>
             
             <van-popup v-model="showPicker2" position="bottom">
-                <van-picker show-toolbar  :columns="columns2" @cancel="onCancel2" @confirm="onConfirm2" @change="onChange2" />
+                <van-picker show-toolbar title="所属行业" confirm-button-text="完成" :columns="columns2" @cancel="onCancel2" @confirm="onConfirm2" @change="onChange2" />
             </van-popup>
         </div>
         <div class="input-wrapper">
@@ -137,7 +137,7 @@
             v-model="form.desc"
             type="textarea"
             name="desc"
-            placeholder="备注"
+            placeholder="请填写备注"
             :rules="[{ required: true, message: '请填写备注' }]"
             />
         </div>
@@ -153,8 +153,8 @@
         <div class="submit-wrapper">
             <div class="title">您确认提交吗？</div>
             <div class="btn-wrapper">
-                <div class="btn go-back">离开</div>
-                <div class="btn">取消</div>
+                <div class="btn go-back" @click="goBackShow">离开</div>
+                <div class="btn" @click="cancleShow">取消</div>
             </div>
         </div>
     </div>      
@@ -162,9 +162,10 @@
     <div class="model-wrapper" v-if="show1">
         <div class="submit-wrapper">
             <div class="title">您确认离开信息登记吗？</div>
+            <div class="title1">离开信息将需要全部重新填写</div>
             <div class="btn-wrapper">
-                <div class="btn go-back1">离开</div>
-                <div class="btn">取消</div>
+                <div class="btn go-back1" @click="goBackShow1">离开</div>
+                <div class="btn go-back2" @click="cancleShow1">继续填写</div>
             </div>
         </div>
     </div> 
@@ -194,7 +195,7 @@ export default {
       showPicker1:false, // 企业类型选择框
       showPicker2:false, // 所属行业选择框
       show:false, // 离开企业信息提提交弹框
-      show1:false, // 离开企业信息弹框
+      show1:true, // 离开企业信息弹框
       columns:[
         {
             values: '',
@@ -271,9 +272,11 @@ export default {
     onClickLeft(){
       this.$router.push("/")
     },
+    // 提交表单成功按钮
     onSubmit(values) {
       console.log('submit', values);
     },
+    // 提交表单失败按钮
     onFailed(values){
         this.$toast("请填写完整信息")
       console.log('failed', values);
@@ -327,6 +330,22 @@ export default {
         })
         return x
     },
+    // 提交离开按钮
+    goBackShow(){
+
+    },
+    // 提交取消按钮
+    cancleShow(){
+
+    },
+    // 离开信息登记按钮
+    goBackShow1(){
+
+    },
+    // 继续信息登记按钮
+    cancleShow1(){
+
+    },
   }
 };
 </script>
@@ -368,6 +387,12 @@ export default {
     }
     .van-uploader__preview{
         margin-top:16px;
+    }
+    .van-picker-column{
+        text-align:left;
+    }
+    .van-picker-column__item{
+        padding-left:17px;
     }
 }
 </style>
@@ -445,7 +470,7 @@ export default {
             justify-content:center;
             align-items:center;
             width:279px;
-            height:160px;
+            height:180px;
             background:rgba(255,255,255,1);
             border-radius:6px;
             font-size:16px;
@@ -453,6 +478,13 @@ export default {
             font-weight:bold;
             color:rgba(51,51,51,1);
             .title{
+            }
+            .title1{
+                font-size:13px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color:rgba(255,39,39,1);
+                margin-top:15px;
             }
             .btn-wrapper{
                 width:80%;
@@ -477,6 +509,11 @@ export default {
                         color:#fff;
                         background:#FF2727;
                         border:2px solid #FF2727;
+                    }
+                    &.go-back2{
+                        color:#fff;
+                        background:#FFA525;
+                        border:2px solid #FFA525;
                     }
                 }
             }
