@@ -42,7 +42,7 @@
             placeholder="企业地址"
             :rules="[{ required: true, message: '请填写企业地址' }]"
             />
-            <van-icon name="location-o" size="18" color="#FFA525" @click="positionAddress"/>
+            <!-- <van-icon name="location-o" size="18" color="#FFA525" @click="positionAddress"/> -->
         </div>
         <div class="input-wrapper">
             <span class="label-title">企业类型</span>
