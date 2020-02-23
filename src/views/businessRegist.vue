@@ -188,7 +188,7 @@
     <div class="model-wrapper" v-if="show1">
         <div class="submit-wrapper">
             <div class="title">您确认离开信息登记吗？</div>
-            <div class="title1">离开信息将需要全部重新填写</div>
+            <div class="title1"><img src="../assets/image/jinggao.png"/>离开信息将需要全部重新填写</div>
             <div class="btn-wrapper">
                 <div class="btn go-back1" @click="goBackShow1">离开</div>
                 <div class="btn go-back2" @click="cancleShow1">继续填写</div>
@@ -599,11 +599,19 @@ export default {
             .title{
             }
             .title1{
+                display:flex;
+                justify-content:center;
+                align-items:center;
                 font-size:13px;
                 font-family:PingFang SC;
                 font-weight:500;
                 color:rgba(255,39,39,1);
                 margin-top:15px;
+                img{
+                    height:15px;
+                    width:16px;
+                    margin-right:5px;
+                }
             }
             .btn-wrapper{
                 width:80%;
