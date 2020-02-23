@@ -52,7 +52,7 @@
     </van-popup>
     <van-popup v-model="showDetail" position="bottom" :style="{ height: '100%' }">
         <van-nav-bar
-        title="职位列表"
+        title="职位详情"
         style="height:44px;font-size:18px;color:#333333"
         @click-left="showDetail=false">
         <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
@@ -128,7 +128,7 @@
 </template>
 
 <script>
- import json from "@/libs/city_code.json"
+import json from "@/libs/city_code.json"
 export default {
   name: "about",
   components:{},
@@ -154,18 +154,19 @@ export default {
         city:''
     },
     showPicker:false,
-      zhwList:[
-          {
-              name:"普工"
-          },
-          {
-              name:"车间"
-          }
-      ]
+    zhwList:[],
+    query:{
+        page:1,
+        pageSize:15,
+        salary:"",
+        benefit:"",
+        postId:"",
+        entId:""
+    },
     }
   },
   created() {
-    
+    this.getData()
   },
  mounted () {
      this.columns[0].values = Object.values(this.allCity).map(function(e){
@@ -180,6 +181,9 @@ export default {
  
   },
   methods:{ 
+    getData(){
+        this.$fetchGet("position/getFirstType", this.query).then(res => {})
+    },
     goDetail(){
         this.showDetail=true
     },

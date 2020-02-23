@@ -326,6 +326,7 @@ export default {
       if(this.compayObj){
         this.addForm.entAddress=this.compayObj.entAddress
         this.addForm.contactPpl=this.compayObj.contactName
+        
         this.addForm.contactTel=this.compayObj.tel
       }
     }

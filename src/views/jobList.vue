@@ -72,7 +72,7 @@ export default {
       this.$router.push("/")
     },
     submit() {
-      this.$fetchPost("release/insertList", {positionReleases:this.$store.state.saSubdata}, "json").then(res=>{
+      this.$fetchPost("release/insertList", this.$store.state.saSubdata, "json").then(res=>{
 
       })
     },
