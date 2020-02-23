@@ -186,7 +186,6 @@ export default {
       { required: true, message: '请上传营业执照'},
     ];
     return {
-        
       activeIcon: require('../assets/image/yes.png'), // 单选选中图片
       inactiveIcon: require('../assets/image/no.png'), //单选未选中图片
       allCity:json, // 省市数据

@@ -265,16 +265,7 @@ export default {
        { values: twodata }
       ],//职位类别
       showPicker: false,//职位类别
-      columns1: [
-        {
-            text:'前端',
-            id:1
-        },
-        {
-            text:'java',
-            id:2
-        }
-      ],//职位名称
+      columns1: [],//职位名称
       showPicker1: false,//职位名称
       actions: [
         { name: '1000以下' },
@@ -320,10 +311,6 @@ export default {
     
   },
   mounted() {
-    this.$nextTick(() => {
-    //   this.getAllmenu()
-    })
-      
   },
   methods: {
     getAllmenu(){
@@ -340,22 +327,31 @@ export default {
             })
         })
     },
-    onChange(picker, values) {
+    onChange(picker, values,index) {
         console.log(values)
         console.log(picker)
+        console.log(index)
         this.$fetchGet("position/getSecondType", {
             firstType:values[0],
             secondType:'',
         }).then(data => {
             this.twodata=data.data
-            picker.setColumnValues(1, data.data);
              this.$fetchGet("position/getJobs", {
-                firstType:values[0],
-                secondType:values[1],
-                position:'',
-            }).then(data => {
-                // this.twodata=data.data
-            })
+                    firstType:values[0],
+                    secondType:index==0?this.twodata[0]:values[1],
+                    position:'',
+                }).then(res => {
+                    // this.twodata=data.data
+                    if(res.data){
+                       res.data.forEach(iteam=>{
+                          iteam.text=iteam.postName
+                          this.columns1.push(iteam)
+                      })
+                    }
+                   
+                })
+            picker.setColumnValues(1, data.data);
+            
         })
         
     },
@@ -444,13 +440,14 @@ export default {
     //职位类别
     onConfirm(value) {
     console.log(value)
-      this.addForm.posttypeName = value.text;
+      this.addForm.posttypeName = value[0]+"-"+value[1];
       this.showPicker = false;
     },
     //职位名称
     onConfirm1(value) {
      console.log(value)
       this.addForm.postName = value.text;
+      this.addForm.postId = value.postId;
       this.showPicker1 = false;
     },
     //月薪
