@@ -326,7 +326,7 @@ export default {
       if(this.compayObj){
         this.addForm.entAddress=this.compayObj.entAddress
         this.addForm.contactPpl=this.compayObj.contactName
-        
+        this.addForm.entId=this.compayObj.id
         this.addForm.contactTel=this.compayObj.tel
       }
     }
@@ -394,7 +394,7 @@ export default {
         posttypeid:'',//  职位类别id
         posttypeName:'',//  职位类别名称
         postName:'',//  职位名称
-        entId:'',// 企业id 
+        entId:this.compayObj.id,// 企业id 
         postId:'',// 职位id 
         recruitNum:'',//招聘人数(单位:人)
         ageRange:'',//年龄要求
@@ -445,7 +445,6 @@ export default {
           console.log(this.submitArr)
       }else{
           console.log("submit", "确定");
-          
           console.log(this.$store.state.saSubdata)
           if(this.istype=="edit"){
             this.$store.state.saSubdata[this.editindex]=this.addForm
@@ -457,7 +456,6 @@ export default {
       }
     },
     onFailed(errorInfo) {
-      
       if(this.titleSub=='next'){
           console.log("onFailed", "下一个");
           
@@ -470,7 +468,7 @@ export default {
     },
     //职位类别
     onConfirm(value) {
-    console.log(value)
+      console.log(value)
       this.addForm.posttypeName = value[0]+"-"+value[1];
       this.showPicker = false;
     },

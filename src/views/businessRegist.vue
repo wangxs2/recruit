@@ -382,8 +382,10 @@ export default {
       this.$fetchPost('enterprise/insert',this.form,"json").then(res => {
           console.log(res)
           if(res.result==1){
-              this.$store.state.companymsg=this.form
+              this.$store.state.companymsg=res.data
               this.$router.push("/submitSucess")
+          }else{
+              this.$toast(res.message)
           }
 
       })

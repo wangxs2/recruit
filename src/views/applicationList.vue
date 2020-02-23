@@ -8,7 +8,7 @@
      <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
     </van-nav-bar>
     <div class="searchrow">
-        <div class="sanjiao" @click="showPicker=true"><span style="margin-right:10px;font-size:15px">城市</span><div class="zj-topleft"></div></div>
+        <div class="sanjiao" @click="showPicker=true"><span style="margin-right:10px;font-size:15px">{{query.city==''?"城市":query.city}}</span><div class="zj-topleft"></div></div>
         <div> 
             <van-search
             v-model="value"
@@ -17,39 +17,53 @@
             placeholder="输入企业/岗位名称"
             />
         </div>
-        <div class="dwnum"><van-icon name="filter-o" />筛选 <div class="num">1</div></div>
+        <div class="dwnum" @click="shaixuan=true"><van-icon name="filter-o" />筛选 <div class="num" v-if="this.query.salary!==-1">1</div></div>
     </div>
     <div class="detail">
-        <div v-for="(item,index) in zhwList" :key="index" @click="goDetail">
-            <div class="iteam-box">
-                <div class="one-list">
-                    <div>{{item.name}}</div>
-                    <div style="color:#F16458;">3000-5000</div>
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+            <van-list
+            v-model="loading"
+            :finished="finished"
+            :offset="10"
+            :immediate-check="false"
+            finished-text="没有更多了"
+            @load="onLoad"
+            >
+            <div v-for="(item,index) in zhwList" :key="index" @click="goDetail(item)">
+                <div class="iteam-box">
+                    <div class="one-list">
+                        <div>{{item.postName}}</div>
+                        <div style="color:#F16458;">{{item.salary}}</div>
+                    </div>
+                    <div class="two-list"> 
+                        <span>上海</span><span>{{item.workExperience}}</span><span>{{item.minEducation=="high"?'高中及以上':item.minEducation=="junior"?'大专及以上':item.minEducation=="college"?'本科及以上':item.minEducation=="middle"?'初中及以上':'不限'}}</span>
+                    </div>
+                    <div class="three-list">
+                        <span v-for="(iteam,index) in item.fulidar" :key="index">{{iteam}}</span>
+                    </div>
+                    <div class="five-list">
+                        <van-icon color="#FFA525" name="phone" />
+                        <div style="margin:0 4px">{{item.contactPpl}}</div>
+                        <div>{{item.contactTel}}</div>
+                    </div>
+                    <div class="four-list">
+                        <img width="30" height="30" src="../assets/image/youyanse.png">
+                        <div style="margin:0 4px">{{item.entName}}</div>
+                        <div class="recompy">认证企业</div>
+                    </div>
                 </div>
-                <div class="two-list">
-                    <span>上海</span><span>1-3年</span><span>大专</span>
-                </div>
-                <div class="three-list">
-                    <span>五险一金</span><span>交通补助</span><span>餐补</span>
-                </div>
-                <div class="five-list">
-                    <van-icon color="#FFA525" name="phone" />
-                    <div style="margin:0 4px">徐先生</div>
-                    <div>13256487956</div>
-                </div>
-                <div class="four-list">
-                    <img width="30" height="30" src="../assets/image/youyanse.png">
-                    <div style="margin:0 4px">道合盛(上海)环保科技有限公司</div>
-                    <div class="recompy">认证企业</div>
-                </div>
-            </div>
-            
-        </div>
+                
+            </div> 
+            </van-list>
+        </van-pull-refresh>
+        
      
     </div>
+    <!-- 城市 -->
     <van-popup v-model="showPicker" position="bottom">
         <van-picker show-toolbar  :columns="columns" @cancel="showPicker=false" @confirm="onConfirm" @change="onChange" />
     </van-popup>
+    <!-- 城市 -->
     <van-popup v-model="showDetail" position="bottom" :style="{ height: '100%' }">
         <van-nav-bar
         title="职位详情"
@@ -123,7 +137,28 @@
         </div>
 
     </van-popup>
-    
+    <!-- 筛选框 -->
+    <van-popup v-model="shaixuan" :style="{ height: '100%' }" position="bottom">
+        <div class="fuli-box">
+            <div class="popu-header">
+                <div></div>
+                <div>职位筛选</div>
+                <div style="color:#FFA525;" @click="quren">完成</div>
+            </div>
+            <div class="content-list">
+                <van-dropdown-menu>
+                    <van-dropdown-item v-model="value1" :options="option1" />
+                    <!-- <van-dropdown-item v-model="value2" :options="option2" /> -->
+                </van-dropdown-menu>
+            </div>
+            <!-- <div class="btn-bottom">
+                <div class="btn" style="color:#FFA525" @click="goonlist">重置</div>
+                <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff" @click="submit">确定</div>
+            </div> -->
+            
+        </div>
+    </van-popup>
+    <!-- 筛选框 -->
   </div>
 </template>
 
@@ -134,7 +169,26 @@ export default {
   components:{},
   data() {
     return {
+      value1: -1,
+      value2: 'a',
+      option1: [
+        { text: '1000以下',value:1 },
+        { text: '1000-2000',value:2 },
+        { text: '3000-5000' ,value:3},
+        { text: '5000-8000',value:4 },
+        { text: '8000-12000' ,value:5},
+        { text: '12000-20000',value:6 },
+        { text: '20000以上',value:7 },
+        { text: '面议' ,value:0},
+        { text: '期望薪资', value: -1 },
+      ],
+      option2: [
+        { text: '默认排序', value: 'a' },
+        { text: '好评排序', value: 'b' },
+        { text: '销量排序', value: 'c' },
+      ],
     showDetail:false,
+    shaixuan:false,
     columns:[
         {
             values: '',
@@ -153,14 +207,18 @@ export default {
         province:'',
         city:''
     },
+    loading: false,
+    finished: false,
     showPicker:false,
+    refreshing:false,
     zhwList:[],
     query:{
         page:1,
-        pageSize:15,
-        salary:"",
+        pageSize:10,
+        salary:-1,
         benefit:"",
         postId:"",
+        city:'',
         entId:""
     },
     }
@@ -182,22 +240,82 @@ export default {
   },
   methods:{ 
     getData(){
-        this.$fetchGet("position/getFirstType", this.query).then(res => {})
+        this.$fetchGet("release/getPosition", this.query).then(res => {
+        if (res.data.total){
+        //   this.curTimeNoDataShow= true
+        res.data.list.forEach(iteam=>{
+            iteam.fulidar=iteam.socialBenefit.split(",")
+        })
+          const rows =res.data.list
+          if (rows == null || rows.length === 0) {
+            // 加载结束
+            this.finished  = true
+            return
+          }
+          if (rows.length < this.query.pageSize) {
+            // 最后一页不足10条的情况
+            this.finished  = true
+          }
+          // 处理数据
+          if (this.query.page === 1) {
+            this.zhwList = rows
+          } else {
+            this.zhwList = this.zhwList.concat(rows)
+          }
+          
+        } else {
+        //   this.curTimeNoDataShow= false
+        }
+            // this.zhwList=this.zhwList.concat(res.data.list)
+            // this.
+        }).finally(() => {
+            this.refreshing = false
+            this.loading = false
+      })
     },
-    goDetail(){
+    //重置
+    goonlist(){
+
+    },
+    //确定
+    submit(){
+
+    },
+    quren(){
+        this.query.salary=this.value1
+        this.query.page=1
+        this.getData()
+        this.shaixuan=false
+    },
+    onLoad(){
+        this.query.page++
+        this.getData()
+    },
+    onRefresh(){
+    this.query.page = 1
+      this.finished = false // 不写这句会导致你上拉到底过后在下拉刷新将不能触发下拉加载事件
+      this.onLoad();
+    },
+    goDetail(row){
         this.showDetail=true
     },
     showJobAll(){
 
     },
     onConfirm(value){
-        console.log(value)
+        if(value[1].text=="市辖区"){
+            this.query.city=value[0].text
+        }else{
+            this.query.city=value[1].text
+        }
+        this.getData()
         this.proCity=value[0].text+value[1].text
         this.showPicker=false
         this.form.province=value[0].text
         this.form.city=value[1].text
     },
     onChange(picker, values,index){
+        
         picker.setColumnValues(1,this.cityDate(this.allCity,values[0].text))
         this.form.proCity=values
     }, 
@@ -220,7 +338,6 @@ export default {
       this.$router.push("/")
     },
      onSubmit(values) {
-      console.log('submit', values);
     },
   }
 };
@@ -230,6 +347,9 @@ export default {
     .delete-button {
      height: 100%;
     }
+    .van-pull-refresh{
+        overflow-y: scroll;
+    }
 }
 
 </style>
@@ -237,11 +357,58 @@ export default {
 .applicationList {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+//   overflow: hidden;
   display: flex;
   flex-direction: column;
   background:#f5f4f7;
   position: relative;
+  .fuli-box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    .popu-header{
+        width:100%;
+        height:44px;
+        display: flex;
+        justify-content:space-between;
+        background:rgba(242,242,242,1);
+        font-size:18px;
+        align-items:center;
+        box-sizing:border-box;
+        padding:0 16px;
+        color:#666666;
+    }
+    .content-list{
+        flex: 1;
+        overflow: hidden;
+        overflow-y: scroll;
+    }
+    .btn-bottom{
+        width: 100%;
+        height:49px;
+        line-height:49px;
+        text-align:center;
+        position: absolute;
+        left: 0px;
+        bottom: 0px;
+        display: flex;
+        font-size:16px;
+        justify-content:space-between;
+        background:rgba(255,255,255,1);
+        box-shadow:0px -1px 0px 0px rgba(238,238,238,1);
+        .btn{
+            flex:1;
+        }
+        .btn:hover{
+            font-size:18px;
+            transform: scale(1.02)
+            }
+    }
+    
+  }
   .searchrow{
     width:100%;
     height:49px;
@@ -286,7 +453,7 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    // overflow: hidden;
     overflow-y: scroll;
     .iteam-box{
         background:#ffffff;
@@ -309,12 +476,16 @@ export default {
             }
         }
         .three-list{
-            margin-bottom:10px;
+              margin-bottom:10px;
+          display: flex;
+          flex-wrap:wrap;
+           justify-content:flex-start;
             span{
                 font-size:12px;
                 background:rgba(233,241,255,1);
                 border-radius:3px;
                 margin-right:10px;
+                 margin-top:6px;
                 color:#4B9BFE;
                 padding:3px 6px;
             }

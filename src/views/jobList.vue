@@ -5,7 +5,7 @@
       title="职位列表"
       style="height:44px;font-size:18px;color:#333333"
       @click-left="onClickLeft">
-     <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
+     <!-- <van-icon name="arrow-left" color="#333333" size="22px" slot="left" /> -->
     </van-nav-bar>
     <div class="detail">
         <van-swipe-cell v-for="(item,index) in $store.state.saSubdata" :key="index">
@@ -39,8 +39,18 @@
     </div>
     <div class="btn-bottom">
         <div class="btn" style="color:#FFA525" @click="goonlist">继续添加</div>
-        <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff" @click="submit">提交</div>
+        <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff" @click="isshow=true">提交</div>
     </div>
+    <van-dialog v-model="isshow" title="" :showConfirmButton='false'>
+        <div class="diosa">
+            <div class="title"><van-icon size="20px" style="margin-right:10px" color="#e6542d" name="warning" />您确认要提交吗？</div>
+            <div style="font-size:14px;color:#FFA525;text-align:center;margin-top:8px">再次发布职位，需要重新录入企业信息！</div>
+            <div class="btn">
+                <div class="btn-small" style="margin-right:30px;background:#FFA525;" @click="submit">确认提交</div>
+                <div class="btn-small" style="background:#ffffff;color:#666666;border:1px solid #dddddd" @click="isshow=false">继续录入</div>
+            </div>
+        </div>
+    </van-dialog>
   </div>
 </template>
 
@@ -51,6 +61,7 @@ export default {
   components:{},
   data() {
     return {
+      isshow:false,
       zhwList:[
           {
               name:"普工"
@@ -73,7 +84,12 @@ export default {
     },
     submit() {
       this.$fetchPost("release/insertList", this.$store.state.saSubdata, "json").then(res=>{
-
+        if(res.result==1){
+          this.$router.push("/succes")
+        }else{
+          this.isshow=false
+          this.$notify({ type: 'danger', message: res.message });
+        }
       })
     },
     //编辑
@@ -117,6 +133,33 @@ export default {
   flex-direction: column;
   background:#f5f4f7;
   position: relative;
+  .diosa{
+      padding:20px 10px;
+      .title{
+          font-size:16px;
+          font-weight:bold;
+          color:rgba(51,51,51,1);
+          justify-content:center;
+          display: flex;
+          align-items:center;
+      }
+       .btn{
+        display: flex;
+        justify-content: center;
+        color:#ffffff;
+         font-size:16px;
+         margin-top:39px;
+        .btn-small{
+          box-sizing: border-box;
+          padding: 10px 20px;
+          border-radius:24px;
+          transition: transform 100ms ease-out
+        }
+        .btn-small:hover{
+          transform: scale(1.02)
+        }
+      }
+  }
   .btn-bottom{
     width: 100%;
     height:49px;
