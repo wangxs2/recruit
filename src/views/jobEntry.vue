@@ -185,13 +185,13 @@
         />
        
         <div style="margin-top:30px">
-          <van-grid :column-num="submitArr.length>0&&this.idIndex>0?3:(istype!=='add'||istype!=='edit')?1:2">
+          <van-grid :column-num="submitArr.length>0&&this.idIndex>0?3:numsa">
             <van-grid-item v-if="submitArr.length>0&&this.idIndex>0&&(istype!=='add'||istype!=='edit')" @click="upSubmit" text="上一个" />
             <van-grid-item v-if="istype!=='add'&&istype!=='edit'" text="" @click="subquwd('next')">
-                <van-button style="width:100%;height:100%;border:none;color:#FFA525;font-size:16px;" type="default">下一个</van-button>
+                <van-button style="border:none;color:#FFA525;font-size:16px;">下一个</van-button>
             </van-grid-item>
             <van-grid-item  text="" @click="subquwd('sub')">
-                <van-button style="width:100%;height:100%;border:none;color:#ffffff;font-size:16px;background:#FFA525;" type="default">完成</van-button>
+                <van-button style="border:none;color:#ffffff;font-size:16px;background:#FFA525;">完成</van-button>
             </van-grid-item>
         </van-grid>
         </div>
@@ -227,7 +227,7 @@ export default {
         posttypeid:'',//  职位类别id
         posttypeName:'',//  职位类别名称
         postName:'',//  职位名称
-        entId:'',// 企业id 
+        entId:3,// 企业id 
         postId:'',// 职位id 
         recruitNum:'',//招聘人数(单位:人)
         salary:'',//月薪
@@ -252,6 +252,7 @@ export default {
         inputTime:'',// 录入时间 
         updateTime:'',// 更新时间                                                                                                 
     },
+    numsa:2,
     submitArr:[],
     idIndex:0,//上一步标志
     titleSub:"",
@@ -314,14 +315,16 @@ export default {
   created() {
     this.istype=this.$route.query.istype
     if(this.istype=="add"){
+      this.numsa=1
       this.submitArr=this.$store.state.saSubdata
     }else if(this.istype=="edit"){
+      this.numsa=1
       this.addForm=this.$route.query.sizeForm
       this.editindex=this.$route.query.editindex
     }else{
       this.compayObj=this.$store.state.companymsg
       if(this.compayObj){
-        this.addForm.entId=this.compayObj.entId
+        // this.addForm.entId=this.compayObj.entId
         this.addForm.entAddress=this.compayObj.entAddress
         this.addForm.contactPpl=this.compayObj.contactName
         this.addForm.contactTel=this.compayObj.tel

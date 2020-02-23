@@ -5,7 +5,7 @@
       title="提交成功"
       style="height:44px;font-size:18px;color:#333333"
       @click-left="onClickLeft">
-     <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
+     <!-- <van-icon name="arrow-left" color="#333333" size="22px" slot="left" /> -->
     </van-nav-bar>
     <div class="content-wrapper">
         <div class="content">
