@@ -28,8 +28,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业名称</span>
             <van-field
-            v-model="form.componyName"
-            name="componyName"
+            v-model="form.entFullname"
+            name="entFullname"
             placeholder="企业名称"
             :rules="[{ required: true, message: '请填写企业名称' }]"
             />
@@ -37,8 +37,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业地址</span>
             <van-field
-            v-model="form.address"
-            name="address"
+            v-model="form.entAddress"
+            name="entAddress"
             placeholder="企业地址"
             :rules="[{ required: true, message: '请填写企业地址' }]"
             />
@@ -47,8 +47,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业类型</span>
             <van-field
-            v-model="form.componyType"
-            name="componyType"
+            v-model="form.entType"
+            name="entType"
             readonly
             placeholder="企业类型"
             :rules="[{ required: true, message: '请选择企业类型' }]"
@@ -63,8 +63,8 @@
         <div class="input-wrapper">
             <span class="label-title">所属行业</span>
             <van-field
-            v-model="form.componyJob"
-            name="componyJob"
+            v-model="form.industry"
+            name="industry"
             readonly
             placeholder="所属行业"
             :rules="[{ required: true, message: '请选择所属行业' }]"
@@ -79,8 +79,8 @@
         <div class="input-wrapper">
             <span class="label-title">联系人</span>
             <van-field
-            v-model="form.linkPeople"
-            name="linkPeople"
+            v-model="form.contactName"
+            name="contactName"
             placeholder="联系人"
             :rules="[{ required: true, message: '请填写联系人' }]"
             />
@@ -88,8 +88,8 @@
         <div class="input-wrapper">
             <span class="label-title">联系电话</span>
             <van-field
-            v-model="form.linkTel"
-            name="linkTel"
+            v-model="form.tel"
+            name="tel"
             placeholder="联系电话"
             :rules="phoneRules"
             />
@@ -121,9 +121,9 @@
         </div>
         <div class="input-wrapper upload-img">
             <span class="label-title">营业执照</span>
-            <van-field name="uploadImg" :rules="uploadImgRules">
+            <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
-                    <van-uploader v-model="form.uploadImg" multiple >
+                    <van-uploader v-model="form.qualiCertificate" multiple >
                         <div class="upload-img-icon">
                             <div class="upload-title">上传</div>
                         </div>
@@ -212,14 +212,14 @@ export default {
       form:{
         province:'',//省
         city:'',//市
-        componyName:'',
-        address:'',
-        componyType:'',
-        componyJob:'',
-        linkPeople:'',
-        linkTel:'',
+        entFullname:'',
+        entAddress:'',
+        entType:'',
+        industry:'',
+        contactName:'',
+        tel:'',
         renzheng:'1',
-        uploadImg:[],
+        qualiCertificate:[],
         desc:''
       }
     }
@@ -259,7 +259,7 @@ export default {
       geolocation.getCurrentPosition((status, result) => {
         if(status=='complete'){
             console.log(result)
-            this.form.address=result.formattedAddress
+            this.form.entAddress=result.formattedAddress
         }else{
           this.$toast("获取当前位置失败");
         }
@@ -293,21 +293,21 @@ export default {
         this.showPicker=false
     },
     onConfirm1(value){
-        this.form.componyType=value
+        this.form.entType=value
         this.showPicker1=false
     },
     onChange1(picker, values,index){
-        this.form.componyType=values
+        this.form.entType=values
     }, 
     onCancel1(){
         this.showPicker1=false
     },
     onConfirm2(value){
-        this.form.componyJob=value
+        this.form.industry=value
         this.showPicker2=false
     },
     onChange2(picker, values,index){
-        this.form.componyJob=values
+        this.form.industry=values
     }, 
     onCancel2(){
         this.showPicker2=false
