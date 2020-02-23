@@ -99,8 +99,22 @@
             <van-field name="renzheng">
                 <template #input>
                     <van-radio-group v-model="form.renzheng" direction="horizontal">
-                        <van-radio name="1">是</van-radio>
-                        <van-radio name="2">否</van-radio>
+                        <van-radio name="1">是
+                            <img
+                            class="radio-checked-img"
+                            slot="icon"
+                            slot-scope="props"
+                            :src="props.checked ? activeIcon : inactiveIcon"
+                            >
+                        </van-radio>
+                        <van-radio name="2">否
+                            <img
+                            class="radio-checked-img"
+                            slot="icon"
+                            slot-scope="props"
+                            :src="props.checked ? activeIcon : inactiveIcon"
+                            >
+                        </van-radio>
                     </van-radio-group>
                 </template>
             </van-field>
@@ -110,7 +124,9 @@
             <van-field name="uploadImg" :rules="uploadImgRules">
                 <template #input>
                     <van-uploader v-model="form.uploadImg" multiple >
-                        <van-button icon="photo" type="primary">上传文件</van-button>
+                        <div class="upload-img-icon">
+                            <div class="upload-title">上传</div>
+                        </div>
                     </van-uploader>
                 </template>
             </van-field>
@@ -170,12 +186,15 @@ export default {
       { required: true, message: '请上传营业执照'},
     ];
     return {
-      allCity:json,
-      showPicker:false,
-      showPicker1:false,
-      showPicker2:false,
-      show:false,
-      show1:false,
+        
+      activeIcon: require('../assets/image/yes.png'), // 单选选中图片
+      inactiveIcon: require('../assets/image/no.png'), //单选未选中图片
+      allCity:json, // 省市数据
+      showPicker:false, // 省市选择框
+      showPicker1:false, // 企业类型选择框
+      showPicker2:false, // 所属行业选择框
+      show:false, // 离开企业信息提提交弹框
+      show1:false, // 离开企业信息弹框
       columns:[
         {
             values: '',
@@ -347,6 +366,9 @@ export default {
         top:0px;
         right:20px;
     }
+    .van-uploader__preview{
+        margin-top:16px;
+    }
 }
 </style>
 <style lang="scss" scoped>
@@ -360,7 +382,30 @@ export default {
             border-bottom: 1px solid #EBECEE;
             padding:0 13px;
             &.upload-img{
-                height: 148px;
+                padding:17px 13px;
+                height: 114px;
+                .upload-img-icon{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    width:165px;
+                    height:113px;
+                    background:url("../assets/image/upload.png") no-repeat;
+                    background-size:165px 113px;
+                    .upload-title{
+                        width:54px;
+                        height:54px;
+                        text-align:center;
+                        line-height:54px;
+                        font-size:16px;
+                        font-family:PingFang SC;
+                        font-weight:500;
+                        color:rgba(255,255,255,1);
+                        background:rgba(0,0,0,1);
+                        opacity:0.4;
+                        border-radius:50%;
+                    }
+                }
 
             }
             &.input-deser{
@@ -376,6 +421,10 @@ export default {
                 font-weight:500;
                 color:rgba(102,102,102,1);
                 margin-right:12px;
+            }
+            .radio-checked-img{
+                width:17px;
+                height:17px;
             }
         }
     }

@@ -57,7 +57,7 @@ export default {
    flex: 1;
     display: flex;
     flex-direction: column;
-    background: url("../assets/image/image_0@3x.png") no-repeat;
+    background: url("../assets/image/image_0@2x.png") no-repeat;
     background-size: 100% 100%;
     margin-top: 30px;
     .content{
