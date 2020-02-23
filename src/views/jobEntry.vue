@@ -38,9 +38,9 @@
         </van-field>
         <van-field
           v-model="password"
-          name="月薪"
-          label="月薪"
-          placeholder="月薪"
+          name="月 薪"
+          label="月 薪"
+          placeholder="月 薪"
           :rules="[{ required: true, message: '请填写月薪' }]"
         />
 
@@ -82,7 +82,7 @@
           label="职位描述"
           type="textarea"
           placeholder="例如工作内容、职位要求等"
-          :rules="[{ required: true, message: '例如工作内容、职位要求等' }]"
+          :rules="[{ required: true, message: '请填写职位描述' }]"
         />
 
         <van-field name="radio" label="工作时间">
@@ -168,8 +168,12 @@
         <div style="margin-top:30px">
           <van-grid :column-num="3">
             <van-grid-item  text="上一个" />
-            <van-grid-item  @click="onSubmit" text="下一个" />
-            <van-grid-item  text="确定" />
+            <van-grid-item  text="" @click="subquwd('next')">
+                <van-button style="width:100%;height:100%;border:none;color:#FFA525;font-size:16px;" type="default">下一个</van-button>
+            </van-grid-item>
+            <van-grid-item  text="" @click="subquwd('sub')">
+                <van-button style="width:100%;height:100%;border:none;color:#ffffff;font-size:16px;background:#FFA525;" type="default">确定</van-button>
+            </van-grid-item>
         </van-grid>
         </div>
       </van-form>
@@ -183,6 +187,7 @@ export default {
   components: {},
   data() {
     return {
+    titleSub:"",
       username: true,
       password: "",
       radio:'8h/26天',
@@ -213,10 +218,20 @@ export default {
       this.$router.push("/");
     },
     onSubmit(values) {
-      console.log("submit", values);
+        
+      if(this.titleSub=='next'){
+          console.log("submit", "下一个");
+      }else{
+          console.log("submit", "确定");
+      }
     },
     onFailed(errorInfo) {
-      console.log("onFailed", errorInfo);
+      
+      if(this.titleSub=='next'){
+          console.log("onFailed", "下一个");
+      }else{
+          console.log("onFailed", "确定");
+      }
       if(errorInfo){
           this.$notify({ type: 'warning', message: '请完善信息' });
       }
@@ -229,6 +244,10 @@ export default {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       this.showPicker6 = false;
+    },
+    subquwd(val){
+        console.log(val)
+        this.titleSub=val
     },
     //多选
     chooseOrder (e) {
@@ -252,6 +271,14 @@ export default {
 };
 </script>
 <style lang="scss">
+.jobEntry{
+    .van-cell{
+        border-bottom:1px solid #eee;
+    }
+    .van-cell:not(:last-child)::after{
+        border:0;
+    }
+}
 .jobEntry .van-field__label span{
     font-size:16px;
     color:#666666;
@@ -265,7 +292,11 @@ export default {
 }
 .jobEntry .van-grid-item:nth-child(3) .van-grid-item__content--center{
     background:#FFA525;
+    padding:0;
     .van-grid-item__text{color:#ffffff;}
+}
+.jobEntry .van-grid-item:nth-child(2) .van-grid-item__content--center{
+    padding:0;
 }
 </style>
 <style lang="scss" scoped>
