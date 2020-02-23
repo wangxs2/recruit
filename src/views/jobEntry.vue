@@ -168,7 +168,7 @@
         <div style="margin-top:30px">
           <van-grid :column-num="3">
             <van-grid-item  text="上一个" />
-            <van-grid-item  text="下一个" />
+            <van-grid-item  @click="onSubmit" text="下一个" />
             <van-grid-item  text="确定" />
         </van-grid>
         </div>
