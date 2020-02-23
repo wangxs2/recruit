@@ -14,7 +14,7 @@
         </div>
         <div class="btn">
           <div class="btn-small" style="margin-right:30px" @click="$router.push('/about')">我要招人</div>
-          <div class="btn-small">我要应聘</div>
+          <div class="btn-small" @click="$router.push('/jobEntry')">我要应聘</div>
         </div>
       </div>
     </div>
@@ -51,11 +51,15 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   .detail{
-    width: 100%;
-    height: 100%;
+   flex: 1;
     display: flex;
     flex-direction: column;
+    background: url("../assets/image/image_0@3x.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 30px;
     .content{
       flex: 1;
       // background: greenyellow;
@@ -64,7 +68,7 @@ export default {
       width: 100%;
       height: 260px;
       box-sizing: border-box;
-      padding-bottom: 64px;
+      padding-bottom: 60px;
       font-size: 16px;
       color: #ffffff;
       .feihua{
