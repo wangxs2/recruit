@@ -28,8 +28,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业名称</span>
             <van-field
-            v-model="form.componyName"
-            name="componyName"
+            v-model="form.entFullname"
+            name="entFullname"
             placeholder="企业名称"
             :rules="[{ required: true, message: '请填写企业名称' }]"
             />
@@ -37,8 +37,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业地址</span>
             <van-field
-            v-model="form.address"
-            name="address"
+            v-model="form.entAddress"
+            name="entAddress"
             placeholder="企业地址"
             :rules="[{ required: true, message: '请填写企业地址' }]"
             />
@@ -47,8 +47,8 @@
         <div class="input-wrapper">
             <span class="label-title">企业类型</span>
             <van-field
-            v-model="form.componyType"
-            name="componyType"
+            v-model="form.entType"
+            name="entType"
             readonly
             placeholder="企业类型"
             :rules="[{ required: true, message: '请选择企业类型' }]"
@@ -63,8 +63,8 @@
         <div class="input-wrapper">
             <span class="label-title">所属行业</span>
             <van-field
-            v-model="form.componyJob"
-            name="componyJob"
+            v-model="form.industry"
+            name="industry"
             readonly
             placeholder="所属行业"
             :rules="[{ required: true, message: '请选择所属行业' }]"
@@ -79,8 +79,8 @@
         <div class="input-wrapper">
             <span class="label-title">联系人</span>
             <van-field
-            v-model="form.linkPeople"
-            name="linkPeople"
+            v-model="form.contactName"
+            name="contactName"
             placeholder="联系人"
             :rules="[{ required: true, message: '请填写联系人' }]"
             />
@@ -88,8 +88,8 @@
         <div class="input-wrapper">
             <span class="label-title">联系电话</span>
             <van-field
-            v-model="form.linkTel"
-            name="linkTel"
+            v-model="form.tel"
+            name="tel"
             placeholder="联系电话"
             :rules="phoneRules"
             />
@@ -99,18 +99,34 @@
             <van-field name="renzheng">
                 <template #input>
                     <van-radio-group v-model="form.renzheng" direction="horizontal">
-                        <van-radio name="1">是</van-radio>
-                        <van-radio name="2">否</van-radio>
+                        <van-radio name="1">是
+                            <img
+                            class="radio-checked-img"
+                            slot="icon"
+                            slot-scope="props"
+                            :src="props.checked ? activeIcon : inactiveIcon"
+                            >
+                        </van-radio>
+                        <van-radio name="2">否
+                            <img
+                            class="radio-checked-img"
+                            slot="icon"
+                            slot-scope="props"
+                            :src="props.checked ? activeIcon : inactiveIcon"
+                            >
+                        </van-radio>
                     </van-radio-group>
                 </template>
             </van-field>
         </div>
         <div class="input-wrapper upload-img">
             <span class="label-title">营业执照</span>
-            <van-field name="uploadImg" :rules="uploadImgRules">
+            <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
-                    <van-uploader v-model="form.uploadImg" multiple >
-                        <van-button icon="photo" type="primary">上传文件</van-button>
+                    <van-uploader v-model="form.qualiCertificate" multiple >
+                        <div class="upload-img-icon">
+                            <div class="upload-title">上传</div>
+                        </div>
                     </van-uploader>
                 </template>
             </van-field>
@@ -170,12 +186,15 @@ export default {
       { required: true, message: '请上传营业执照'},
     ];
     return {
-      allCity:json,
-      showPicker:false,
-      showPicker1:false,
-      showPicker2:false,
-      show:false,
-      show1:false,
+        
+      activeIcon: require('../assets/image/yes.png'), // 单选选中图片
+      inactiveIcon: require('../assets/image/no.png'), //单选未选中图片
+      allCity:json, // 省市数据
+      showPicker:false, // 省市选择框
+      showPicker1:false, // 企业类型选择框
+      showPicker2:false, // 所属行业选择框
+      show:false, // 离开企业信息提提交弹框
+      show1:false, // 离开企业信息弹框
       columns:[
         {
             values: '',
@@ -193,14 +212,14 @@ export default {
       form:{
         province:'',//省
         city:'',//市
-        componyName:'',
-        address:'',
-        componyType:'',
-        componyJob:'',
-        linkPeople:'',
-        linkTel:'',
+        entFullname:'',
+        entAddress:'',
+        entType:'',
+        industry:'',
+        contactName:'',
+        tel:'',
         renzheng:'1',
-        uploadImg:[],
+        qualiCertificate:[],
         desc:''
       }
     }
@@ -240,7 +259,7 @@ export default {
       geolocation.getCurrentPosition((status, result) => {
         if(status=='complete'){
             console.log(result)
-            this.form.address=result.formattedAddress
+            this.form.entAddress=result.formattedAddress
         }else{
           this.$toast("获取当前位置失败");
         }
@@ -274,21 +293,21 @@ export default {
         this.showPicker=false
     },
     onConfirm1(value){
-        this.form.componyType=value
+        this.form.entType=value
         this.showPicker1=false
     },
     onChange1(picker, values,index){
-        this.form.componyType=values
+        this.form.entType=values
     }, 
     onCancel1(){
         this.showPicker1=false
     },
     onConfirm2(value){
-        this.form.componyJob=value
+        this.form.industry=value
         this.showPicker2=false
     },
     onChange2(picker, values,index){
-        this.form.componyJob=values
+        this.form.industry=values
     }, 
     onCancel2(){
         this.showPicker2=false
@@ -347,6 +366,9 @@ export default {
         top:0px;
         right:20px;
     }
+    .van-uploader__preview{
+        margin-top:16px;
+    }
 }
 </style>
 <style lang="scss" scoped>
@@ -360,7 +382,30 @@ export default {
             border-bottom: 1px solid #EBECEE;
             padding:0 13px;
             &.upload-img{
-                height: 148px;
+                padding:17px 13px;
+                height: 114px;
+                .upload-img-icon{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    width:165px;
+                    height:113px;
+                    background:url("../assets/image/upload.png") no-repeat;
+                    background-size:165px 113px;
+                    .upload-title{
+                        width:54px;
+                        height:54px;
+                        text-align:center;
+                        line-height:54px;
+                        font-size:16px;
+                        font-family:PingFang SC;
+                        font-weight:500;
+                        color:rgba(255,255,255,1);
+                        background:rgba(0,0,0,1);
+                        opacity:0.4;
+                        border-radius:50%;
+                    }
+                }
 
             }
             &.input-deser{
@@ -376,6 +421,10 @@ export default {
                 font-weight:500;
                 color:rgba(102,102,102,1);
                 margin-right:12px;
+            }
+            .radio-checked-img{
+                width:17px;
+                height:17px;
             }
         }
     }

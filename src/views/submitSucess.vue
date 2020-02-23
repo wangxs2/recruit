@@ -10,7 +10,7 @@
     <div class="content-wrapper">
         <div class="content">
             <div class="img-wrapper">
-                <img src="">
+                <img src="../assets/image/submit-sucess.png">
                 <span>提交成功</span>
             </div>
             <div class="btn" @click="publistJob">发布职位</div>
@@ -73,6 +73,10 @@ export default {
                 }
                 span{
                     margin-top:25px;
+                    font-size:20px;
+                    font-family:PingFang SC;
+                    font-weight:bold;
+                    color:rgba(51,51,51,1);
                 }
             }
             .btn{
