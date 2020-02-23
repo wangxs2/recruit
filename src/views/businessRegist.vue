@@ -57,7 +57,7 @@
             <van-icon name="arrow" size="16"/>
             
             <van-popup v-model="showPicker1" position="bottom">
-                <van-picker show-toolbar  :columns="columns1" @cancel="onCancel1" @confirm="onConfirm1" @change="onChange1" />
+                <van-picker show-toolbar title="企业类型" confirm-button-text="完成"  :columns="columns1" @cancel="onCancel1" @confirm="onConfirm1" @change="onChange1" />
             </van-popup>
         </div>
         <div class="input-wrapper">
@@ -65,15 +65,30 @@
             <van-field
             v-model="form.industry"
             name="industry"
-            readonly
             placeholder="所属行业"
-            :rules="[{ required: true, message: '请选择所属行业' }]"
-             @click="showPicker2 = true"
+            :rules="[{ required: true, message: '请填写所属行业' }]"
             />
+             <!-- @click="showPicker2 = true"
             <van-icon name="arrow" size="16"/>
             
             <van-popup v-model="showPicker2" position="bottom">
-                <van-picker show-toolbar  :columns="columns2" @cancel="onCancel2" @confirm="onConfirm2" @change="onChange2" />
+                <van-picker show-toolbar title="所属行业" confirm-button-text="完成" :columns="columns2" @cancel="onCancel2" @confirm="onConfirm2" @change="onChange2" />
+            </van-popup> -->
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">企业规模</span>
+            <van-field
+            v-model="form.staffAmount"
+            readonly
+            name="staffAmount"
+            placeholder="企业规模"
+            :rules="[{ required: true, message: '请选择企业规模' }]"
+             @click="showPicker3 = true"
+            />
+            <van-icon name="arrow" size="16"/>
+            
+            <van-popup v-model="showPicker3" position="bottom">
+                <van-picker show-toolbar title="企业规模" confirm-button-text="完成" :columns="columns3" @cancel="onCancel3" @confirm="onConfirm3" @change="onChange3" />
             </van-popup>
         </div>
         <div class="input-wrapper">
@@ -95,6 +110,15 @@
             />
         </div>
         <div class="input-wrapper">
+            <span class="label-title">邮箱地址</span>
+            <van-field
+            v-model="form.emailAddress"
+            name="emailAddress"
+            placeholder="邮箱地址"
+            :rules="[{ required: true, message: '请填写邮箱地址' }]"
+            />
+        </div>
+        <!-- <div class="input-wrapper">
             <span class="label-title">是否认证</span>
             <van-field name="renzheng">
                 <template #input>
@@ -118,12 +142,14 @@
                     </van-radio-group>
                 </template>
             </van-field>
-        </div>
+        </div> -->
         <div class="input-wrapper upload-img">
             <span class="label-title">营业执照</span>
             <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
-                    <van-uploader v-model="form.qualiCertificate" multiple >
+                    <van-uploader v-model="meedUrlArr" multiple 
+                    :after-read="imgRead" 
+                    @delete="imgdelete">
                         <div class="upload-img-icon">
                             <div class="upload-title">上传</div>
                         </div>
@@ -134,11 +160,11 @@
         <div class="input-wrapper input-deser">
             <span class="label-title">备注</span>
             <van-field
-            v-model="form.desc"
+            v-model="form.remark"
             type="textarea"
-            name="desc"
-            placeholder="备注"
-            :rules="[{ required: true, message: '请填写备注' }]"
+            name="remark"
+            placeholder="请填写备注"
+            :rules="[{ required: false, message: '请填写备注' }]"
             />
         </div>
         <div style="margin: 16px;">
@@ -153,8 +179,8 @@
         <div class="submit-wrapper">
             <div class="title">您确认提交吗？</div>
             <div class="btn-wrapper">
-                <div class="btn go-back">离开</div>
-                <div class="btn">取消</div>
+                <div class="btn go-back" @click="goBackShow">离开</div>
+                <div class="btn" @click="cancleShow">取消</div>
             </div>
         </div>
     </div>      
@@ -162,9 +188,10 @@
     <div class="model-wrapper" v-if="show1">
         <div class="submit-wrapper">
             <div class="title">您确认离开信息登记吗？</div>
+            <div class="title1">离开信息将需要全部重新填写</div>
             <div class="btn-wrapper">
-                <div class="btn go-back1">离开</div>
-                <div class="btn">取消</div>
+                <div class="btn go-back1" @click="goBackShow1">离开</div>
+                <div class="btn go-back2" @click="cancleShow1">继续填写</div>
             </div>
         </div>
     </div> 
@@ -183,7 +210,7 @@ export default {
       { validator: this.phoneValidator, message: '手机号格式错误' },
     ];
     this.uploadImgRules = [
-      { required: true, message: '请上传营业执照'},
+      { required: false, message: '请上传营业执照'},
     ];
     return {
       activeIcon: require('../assets/image/yes.png'), // 单选选中图片
@@ -192,6 +219,7 @@ export default {
       showPicker:false, // 省市选择框
       showPicker1:false, // 企业类型选择框
       showPicker2:false, // 所属行业选择框
+      showPicker3:false, // 所属行业选择框
       show:false, // 离开企业信息提提交弹框
       show1:false, // 离开企业信息弹框
       columns:[
@@ -205,22 +233,27 @@ export default {
             defaultIndex: 0
         },
       ],
-      columns1: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      columns1: ['全部', '国企', '外商独资', '代表处', '合资', '民营', '国家机关', '股份制企业', '上市公司', '事业单位', '银行', '医院', '学校/下级学院', '律师事务所', '社会团体', '港澳台公司', '其他'],
       columns2:['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      columns3:['全部', '20人以下', '20-99人', '100-499人', '500-999人','1000-9999人', '10000人以上'],
       proCity:'',
       form:{
         province:'',//省
         city:'',//市
         entFullname:'',
+        entName:'',
         entAddress:'',
         entType:'',
         industry:'',
+        staffAmount:'',
         contactName:'',
         tel:'',
-        renzheng:'1',
-        qualiCertificate:[],
-        desc:''
-      }
+        emailAddress:'',
+        // renzheng:'1',
+        qualiCertificate:'',
+        remark:''
+      },
+      meedUrlArr:[],
     }
   },
   created() {
@@ -239,6 +272,78 @@ export default {
  
   },
   methods:{ 
+      
+    imgRead(val){
+        // let selectImg=[]
+        // this.showimg=true
+        // if (val&&!Array.isArray(val)){   
+        //   val=[val]
+
+        // }
+        
+        // val.forEach(item => {
+        //   let obj={}
+        //   lrz(item.file, {
+        //     quality: 0.2    //自定义使用压缩方式
+        //   })  
+        //   .then(rst=> {
+        //       //成功时执行
+        //     let file = new window.File([rst.file], item.file.name, {
+        //         type: item.file.type
+        //     }) //把blob转化成file
+        //     let reader = new FileReader();    //html5读文件
+
+        //     reader.readAsDataURL(file); //转BASE64 
+        //     let that=this
+        //     reader.onload = function (e) {        //读取完毕后调用接口
+
+        //       obj={
+        //         ImgByte: e.target.result
+        //       }
+        //       selectImg.push(obj)
+        //       if(val.length>0&&val.length==selectImg.length){
+                //   that.uploadImg2(selectImg)
+                  this.uploadImg2(val)
+        //         }
+        //     }
+
+              
+        //   }).catch(error=> {
+        //       //失败时执行
+        //   }).always(()=> {
+        
+        //       //不管成功或失败，都会执行
+        //   })
+        // })
+
+    },
+    
+    //删除图片的回调
+    imgdelete(val,detail){
+    //   if (this.meedUrlArr2&&this.meedUrlArr2.length){
+    //     this.meedUrlArr2.forEach(item => {
+
+    //       item=item.split(',')
+    //     })
+    //     this.meedUrlArr2 = (this.meedUrlArr2 + '').split(',');
+    //     this.meedUrlArr2 = this.meedUrlArr2.toString().split(',');
+    //     this.meedUrlArr2 = this.meedUrlArr2.join().split(',');
+        
+    //     this.$toast("图片删除成功");
+    //     this.meedUrlArr2.splice(detail.index, 1)
+      
+    //   }
+    },
+    //提供方录入身份证明
+    uploadImg2 (file) {
+        console.log(file)
+        let formdata1 = new FormData();
+        formdata1.append('files', file.file);
+        this.$fetchPostFile("enterprise/uploadFiles",formdata1).then(res=> {
+            this.$toast(res.message);
+            this.form.qualiCertificate=res.data.paths
+        })
+    },
     positionAddress(){
         
       let geolocation = new AMap.Geolocation({
@@ -270,9 +375,16 @@ export default {
     onClickLeft(){
       this.$router.push("/")
     },
+    // 提交表单成功按钮
     onSubmit(values) {
+        this.form.entName=this.form.entFullname
       console.log('submit', values);
+      this.$fetchPost('enterprise/insert',this.form,"json").then(res => {
+          console.log(res)
+
+      })
     },
+    // 提交表单失败按钮
     onFailed(values){
         this.$toast("请填写完整信息")
       console.log('failed', values);
@@ -311,6 +423,16 @@ export default {
     onCancel2(){
         this.showPicker2=false
     },
+    onConfirm3(value){
+        this.form.staffAmount=value
+        this.showPicker3=false
+    },
+    onChange3(picker, values,index){
+        this.form.staffAmount=values
+    }, 
+    onCancel3(){
+        this.showPicker3=false
+    },
     cityDate(data,province){
         var x=[]
         data.forEach(function(res){
@@ -325,6 +447,22 @@ export default {
             }
         })
         return x
+    },
+    // 提交离开按钮
+    goBackShow(){
+
+    },
+    // 提交取消按钮
+    cancleShow(){
+
+    },
+    // 离开信息登记按钮
+    goBackShow1(){
+
+    },
+    // 继续信息登记按钮
+    cancleShow1(){
+
     },
   }
 };
@@ -367,6 +505,12 @@ export default {
     }
     .van-uploader__preview{
         margin-top:16px;
+    }
+    .van-picker-column{
+        text-align:left;
+    }
+    .van-picker-column__item{
+        padding-left:17px;
     }
 }
 </style>
@@ -444,7 +588,7 @@ export default {
             justify-content:center;
             align-items:center;
             width:279px;
-            height:160px;
+            height:180px;
             background:rgba(255,255,255,1);
             border-radius:6px;
             font-size:16px;
@@ -452,6 +596,13 @@ export default {
             font-weight:bold;
             color:rgba(51,51,51,1);
             .title{
+            }
+            .title1{
+                font-size:13px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color:rgba(255,39,39,1);
+                margin-top:15px;
             }
             .btn-wrapper{
                 width:80%;
@@ -476,6 +627,11 @@ export default {
                         color:#fff;
                         background:#FF2727;
                         border:2px solid #FF2727;
+                    }
+                    &.go-back2{
+                        color:#fff;
+                        background:#FFA525;
+                        border:2px solid #FFA525;
                     }
                 }
             }
