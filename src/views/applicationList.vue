@@ -1,46 +1,53 @@
 <template>
 <!-- 职位列表 -->
-  <div class="jobList">
+  <div class="applicationList">
     <van-nav-bar
       title="职位列表"
       style="height:44px;font-size:18px;color:#333333"
       @click-left="onClickLeft">
      <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
     </van-nav-bar>
+    <div class="searchrow">
+        <div class="sanjiao"><span style="margin-right:10px;font-size:15px">城市</span><div class="zj-topleft"></div></div>
+        <div> 
+            <van-search
+            v-model="value"
+            shape="round"
+            background="#ffffff"
+            placeholder="输入企业名称/岗位名称"
+            />
+        </div>
+        <div class="dwnum"><van-icon name="filter-o" />筛选 <div class="num">1</div></div>
+    </div>
     <div class="detail">
-        <van-swipe-cell v-for="(item,index) in $store.state.saSubdata" :key="index">
+        <div v-for="(item,index) in zhwList" :key="index">
             <div class="iteam-box">
                 <div class="one-list">
-                    <div>{{item.postName}}</div>
-                    <div style="color:#F16458;">{{item.minSalary}}</div>
+                    <div>{{item.name}}</div>
+                    <div style="color:#F16458;">3000-5000</div>
                 </div>
                 <div class="two-list">
-                    <span>上海</span><span>{{item.workExperience}}</span><span>{{item.minEducation}}</span>
+                    <span>上海</span><span>1-3年</span><span>大专</span>
                 </div>
                 <div class="three-list">
-                    <span v-for="(iteam,index) in item.fulime" :key="index">{{iteam}}</span>
+                    <span>五险一金</span><span>交通补助</span><span>餐补</span>
+                </div>
+                <div class="five-list">
+                    <van-icon color="#FFA525" name="phone" />
+                    <div style="margin:0 4px">徐先生</div>
+                    <div>13256487956</div>
                 </div>
                 <div class="four-list">
-                    <img width="30" height="30" src="../assets/image/addre.png">
-                    <div style="margin:0 4px">{{item.entAddress}}</div>
+                    <img width="30" height="30" src="../assets/image/youyanse.png">
+                    <div style="margin:0 4px">道合盛(上海)环保科技有限公司</div>
                     <div class="recompy">认证企业</div>
                 </div>
             </div>
-            <van-button
-                slot="right"
-                square
-                icon="delete"
-                text="删除"
-                type="danger"
-                class="delete-button"
-            />
-        </van-swipe-cell>
+            
+        </div>
      
     </div>
-    <div class="btn-bottom">
-        <div class="btn" style="color:#FFA525">继续添加</div>
-        <div class="btn" style="background:rgba(255,165,37,1);color:#ffffff">提交</div>
-    </div>
+    
   </div>
 </template>
 
@@ -51,6 +58,7 @@ export default {
   components:{},
   data() {
     return {
+        value:'',
       zhwList:[
           {
               name:"普工"
@@ -62,7 +70,7 @@ export default {
     }
   },
   created() {
-    console.log(this.$store.state.saSubdata)
+    
   },
  mounted () {
  
@@ -78,7 +86,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.jobList{
+.applicationList{
     .delete-button {
      height: 100%;
     }
@@ -86,7 +94,7 @@ export default {
 
 </style>
 <style lang="scss" scoped>
-.jobList {
+.applicationList {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -94,26 +102,45 @@ export default {
   flex-direction: column;
   background:#f5f4f7;
   position: relative;
-  .btn-bottom{
-    width: 100%;
+  .searchrow{
+    width:100%;
     height:49px;
-    line-height:49px;
-    text-align:center;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
+    background:#ffffff;
     display: flex;
-    font-size:16px;
+    font-size:13px;
     justify-content:space-between;
-    background:rgba(255,255,255,1);
-    box-shadow:0px -1px 0px 0px rgba(238,238,238,1);
-    .btn{
-        flex:1;
+    align-items:center;
+    box-sizing:border-box;
+    padding: 0 14px;
+    .dwnum{
+        position: relative;
     }
-    .btn:hover{
-        font-size:18px;
-          transform: scale(1.02)
-        }
+    .num{
+        position: absolute;
+        top:-6px;
+        right:-6px;
+       width:14px;
+        height:14px;
+        background:rgba(255,62,47,1);
+        border-radius:50%;
+        text-align:center;
+        line-height:15px;
+        box-sizing:border-box;
+        color:#ffffff;
+        font-size:8px;
+    }
+    .sanjiao{
+        display: flex;
+        justify-content:flex-start;
+        align-items:flex-end;
+    }
+    .zj-topleft{
+        width: 0;
+        height: 0;
+        border-color: transparent #333333;
+        border-width:6px 6px 0 0 ;
+        border-style:solid;
+    }
   }
   .detail {
     flex: 1;
@@ -123,7 +150,7 @@ export default {
     overflow-y: scroll;
     .iteam-box{
         background:#ffffff;
-        margin-bottom:10px;
+        margin-bottom:8px;
         font-size:16px;
         box-sizing:border-box;
         padding:12px;
@@ -131,10 +158,10 @@ export default {
            display: flex;
            justify-content:space-between;
            color:#333333;
-           margin-bottom:10px;
+           margin-bottom:6px;
         }
         .two-list{
-            margin-bottom:10px;
+            margin-bottom:6px;
             span{
                 font-size:14px;
                 color:#666666;
@@ -153,6 +180,7 @@ export default {
             }
         }
         .four-list{
+            
            display: flex;
            font-size:13px;
            justify-content:flex-start;
@@ -165,6 +193,13 @@ export default {
                box-sizing:border-box;
                border-radius:3px;
            }
+        }
+        .five-list{
+            display: flex;
+           font-size:13px;
+           margin-bottom:8px;
+           justify-content:flex-start;
+           align-items:center;
         }
     }
   }

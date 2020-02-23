@@ -41,6 +41,11 @@ const routes = [
     name: 'submitSucess',
     component: () => import(/* webpackChunkName: "about" */ '../views/submitSucess.vue')
   },
+  {
+    path: '/applicationList',
+    name: 'applicationList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/applicationList.vue')
+  },
   
   
 
