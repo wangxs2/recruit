@@ -1,0 +1,385 @@
+<template>
+<!-- 企业信息录入 -->
+  <div class="business-regist">
+    <van-nav-bar
+      title="企业基础信息登记"
+      style="height:44px;font-size:18px;color:#333333"
+      @click-left="onClickLeft">
+     <van-icon name="arrow-left" color="#333333" size="22px" slot="left" />
+    </van-nav-bar>
+    <div class="form-wrapper">
+      <van-form @submit="onSubmit">
+        <div class="input-wrapper">
+            <span class="label-title">所在省市</span>
+            <van-field
+            v-model="proCity"
+            name="所在省市"
+            readonly
+            placeholder="所在省市"
+            :rules="[{ required: true, message: '请选择所在省市' }]"
+             @click="showPicker = true"
+            />
+            <van-icon name="arrow" size="16"/>
+            
+            <van-popup v-model="showPicker" position="bottom">
+                <van-picker show-toolbar  :columns="columns" @cancel="onCancel" @confirm="onConfirm" @change="onChange" />
+            </van-popup>
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">企业名称</span>
+            <van-field
+            v-model="form.componyName"
+            name="企业名称"
+            placeholder="企业名称"
+            :rules="[{ required: true, message: '请填写企业名称' }]"
+            />
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">企业地址</span>
+            <van-field
+            v-model="form.address"
+            name="企业地址"
+            placeholder="企业地址"
+            :rules="[{ required: true, message: '请填写企业地址' }]"
+            />
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">企业类型</span>
+            <van-field
+            v-model="form.componyType"
+            name="企业类型"
+            readonly
+            placeholder="企业类型"
+            :rules="[{ required: true, message: '请选择企业类型' }]"
+             @click="showPicker1 = true"
+            />
+            <van-icon name="arrow" size="16"/>
+            
+            <van-popup v-model="showPicker1" position="bottom">
+                <van-picker show-toolbar  :columns="columns1" @cancel="onCancel1" @confirm="onConfirm1" @change="onChange1" />
+            </van-popup>
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">所属行业</span>
+            <van-field
+            v-model="form.componyJob"
+            name="所属行业"
+            readonly
+            placeholder="所属行业"
+            :rules="[{ required: true, message: '请选择所属行业' }]"
+             @click="showPicker2 = true"
+            />
+            <van-icon name="arrow" size="16"/>
+            
+            <van-popup v-model="showPicker2" position="bottom">
+                <van-picker show-toolbar  :columns="columns2" @cancel="onCancel2" @confirm="onConfirm2" @change="onChange2" />
+            </van-popup>
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">联系人</span>
+            <van-field
+            v-model="form.linkPeople"
+            name="联系人"
+            placeholder="联系人"
+            :rules="[{ required: true, message: '请填写联系人' }]"
+            />
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">联系电话</span>
+            <van-field
+            v-model="form.linkTel"
+            name="联系电话"
+            placeholder="联系电话"
+            :rules="[{ required: true, message: '请填写联系电话' }]"
+            />
+        </div>
+        <div class="input-wrapper">
+            <span class="label-title">是否认证</span>
+            <van-radio-group v-model="form.renzheng" direction="horizontal">
+                <van-radio name="1">单选框 1</van-radio>
+                <van-radio name="2">单选框 2</van-radio>
+            </van-radio-group>
+        </div>
+        <div class="input-wrapper upload-img">
+            <span class="label-title">营业执照</span>
+            <van-uploader v-model="form.uploadImg" multiple>
+                <van-button icon="photo" type="primary">上传文件</van-button>
+            </van-uploader>
+        </div>
+        <div class="input-wrapper input-deser">
+            <span class="label-title">备注</span>
+            <van-field
+            v-model="form.desc"
+            name="备注"
+            placeholder="备注"
+            :rules="[{ required: true, message: '请填写备注' }]"
+            />
+        </div>
+        <div style="margin: 16px;">
+          <van-button round block type="info" native-type="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+    </div>
+    <!-- 提交弹框 -->       
+    <div class="model-wrapper" v-if="show">
+        <div class="submit-wrapper">
+            <div class="title">您确认提交吗？</div>
+            <div class="btn-wrapper">
+                <div class="btn go-back">离开</div>
+                <div class="btn">取消</div>
+            </div>
+        </div>
+    </div>      
+    <!-- 离开信息登记弹框 -->      
+    <div class="model-wrapper" v-if="show1">
+        <div class="submit-wrapper">
+            <div class="title">您确认离开信息登记吗？</div>
+            <div class="btn-wrapper">
+                <div class="btn go-back1">离开</div>
+                <div class="btn">取消</div>
+            </div>
+        </div>
+    </div> 
+  </div>
+</template>
+
+<script>
+ 
+import json from "@/libs/city_code.json"
+export default {
+  name: "businessRegist",
+  components:{},
+  data() {
+    return {
+      allCity:json,
+      showPicker:false,
+      showPicker1:false,
+      showPicker2:false,
+      show:false,
+      show1:false,
+      columns:[
+        {
+            values: '',
+            className: 'column1'
+        },
+        {
+            values: '',
+            className: 'column2',
+            defaultIndex: 0
+        },
+      ],
+      columns1: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      columns2:['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      proCity:'',
+      form:{
+        province:'',//省
+        city:'',//市
+        componyName:'',
+        address:'',
+        componyType:'',
+        componyJob:'',
+        linkPeople:'',
+        linkTel:'',
+        renzheng:'1',
+        uploadImg:[],
+        desc:''
+      }
+    }
+  },
+  created() {
+    
+  },
+ mounted () {
+     this.columns[0].values = Object.values(this.allCity).map(function(e){
+        return {text:e.name}
+    })
+    // 默认展示二级的数据
+    if (this.allCity[0].city){
+        this.columns[1].values = Object.values(this.allCity[0].city).map(function(e){
+            return {text:e.name}
+        })
+    }
+ 
+  },
+  methods:{ 
+    onClickLeft(){
+      this.$router.push("/")
+    },
+    onSubmit(values) {
+      console.log('submit', values);
+    },
+    onConfirm(value){
+        console.log(value)
+        this.proCity=value[0].text+value[1].text
+        this.showPicker=false
+        this.form.province=value[0].text
+        this.form.city=value[1].text
+    },
+    onChange(picker, values,index){
+          picker.setColumnValues(1,this.cityDate(this.allCity,values[0].text))
+          
+        this.form.proCity=values
+    }, 
+    onCancel(){
+        this.showPicker=false
+    },
+    onConfirm1(value){
+        this.form.componyType=value
+        this.showPicker1=false
+    },
+    onChange1(picker, values,index){
+        this.form.componyType=values
+    }, 
+    onCancel1(){
+        this.showPicker1=false
+
+    },
+    onConfirm2(value){
+        this.form.componyJob=value
+        this.showPicker2=false
+    },
+    onChange2(picker, values,index){
+        this.form.componyJob=values
+    }, 
+    onCancel2(){
+        this.showPicker2=false
+    },
+    cityDate(data,province){
+        var x=[]
+        data.forEach(function(res){
+            if (res.city){
+                if(res.name == province){
+                    for (let i = 0; i < res.city.length; i++) {
+                        let obj = {}
+                        obj.text = res.city[i].name
+                        x.push(obj);
+                    }
+                }
+            }
+        })
+        return x
+    },
+  }
+};
+</script>
+<style lang="scss">
+.van-cell{
+    flex:1;
+}
+.van-radio__label{
+    font-size:16px;
+    font-family:PingFang SC;
+    font-weight:500;
+    color:rgba(102,102,102,1);
+
+}
+.van-button::before,.van-button--info{
+    width:327px;
+    height:44px;
+    background:rgba(255,165,37,1);
+    border-radius:5px;
+    border:none;
+    font-size:16px;
+    font-family:PingFang SC;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+}
+.van-cell{
+    padding:0;
+}
+.van-cell:not(:last-child)::after{
+    border:0;
+}
+.van-field__error-message{
+    position:absolute;
+    top:0px;
+    right:20px;
+}
+</style>
+<style lang="scss" scoped>
+.business-regist{
+    .form-wrapper{
+        .input-wrapper{
+            display:flex;
+            justify-content: flex-start;
+            align-items: center;
+            height:52px;
+            border-bottom: 1px solid #EBECEE;
+            padding:0 13px;
+            &.upload-img{
+                height: 148px;
+
+            }
+            &.input-deser{
+                height:78px;
+            }
+            .label-title{
+                width: 70px;
+                font-size:16px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color:rgba(102,102,102,1);
+                margin-right:12px;
+            }
+        }
+    }
+    .model-wrapper{
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:rgba(0,0,0,.5);
+        z-index:10;
+        .submit-wrapper{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            width:279px;
+            height:160px;
+            background:rgba(255,255,255,1);
+            border-radius:6px;
+            font-size:16px;
+            font-family:PingFang SC;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+            .title{
+            }
+            .btn-wrapper{
+                width:80%;
+                display:flex;
+                justify-content:space-between;
+                padding:0 15px;
+                margin-top:35px;
+                .btn{
+                    width:96px;
+                    height:36px;
+                    border-radius:18px;
+                    text-align:center;
+                    line-height:36px;
+                    color:#333;
+                    border:2px solid rgba(187,187,187,1);
+                    &.go-back{
+                        color:#fff;
+                        background:rgba(255,165,37,1);
+                        border:2px solid rgba(255,165,37,1);
+                    }
+                    &.go-back1{
+                        color:#fff;
+                        background:#FF2727;
+                        border:2px solid #FF2727;
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+</style>
