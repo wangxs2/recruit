@@ -1,5 +1,5 @@
 <template>
-<!-- 企业信息录入 -->
+<!-- 企业信息录入成功 -->
   <div class="submit-sucess">
     <van-nav-bar
       title="提交成功"

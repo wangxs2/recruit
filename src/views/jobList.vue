@@ -21,7 +21,7 @@
                     <span>五险一金</span><span>交通补助</span><span>餐补</span>
                 </div>
                 <div class="four-list">
-                    <van-icon size="18px" name="location-o" />
+                    <img width="30" height="30" src="../assets/image/addre.png">
                     <div style="margin:0 4px">道合盛(上海)环保科技有限公司</div>
                     <div class="recompy">认证企业</div>
                 </div>

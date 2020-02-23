@@ -223,6 +223,7 @@ export default {
           console.log("submit", "下一个");
       }else{
           console.log("submit", "确定");
+          this.$router.push('/jobList')
       }
     },
     onFailed(errorInfo) {
