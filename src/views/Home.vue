@@ -14,7 +14,7 @@
         </div>
         <div class="btn">
           <div class="btn-small" style="margin-right:30px" @click="$router.push('/businessRegist')">我要招人</div>
-          <div class="btn-small" @click="$router.push('/jobEntry')">>我要应聘</div>
+          <div class="btn-small" @click="$router.push('/jobEntry')">我要应聘</div>
         </div>
       </div>
     </div>

@@ -292,39 +292,41 @@ export default {
 };
 </script>
 <style lang="scss">
-.van-cell{
-    flex:1;
-}
-.van-radio__label{
-    font-size:16px;
-    font-family:PingFang SC;
-    font-weight:500;
-    color:rgba(102,102,102,1);
+.business-regist{
+    .van-cell{
+        flex:1;
+    }
+    .van-radio__label{
+        font-size:16px;
+        font-family:PingFang SC;
+        font-weight:500;
+        color:rgba(102,102,102,1);
 
-}
-.van-button::before,.van-button--info{
-    width:327px;
-    height:44px;
-    background:rgba(255,165,37,1);
-    border-radius:5px;
-    border:none;
-    font-size:16px;
-    font-family:PingFang SC;
-    font-weight:500;
-    color:rgba(255,255,255,1);
-}
-.van-cell{
-    padding:0;
-    font-size:16px;
-    color:#333;
-}
-.van-cell:not(:last-child)::after{
-    border:0;
-}
-.van-field__error-message{
-    position:absolute;
-    top:0px;
-    right:20px;
+    }
+    .van-button::before,.van-button--info{
+        width:327px;
+        height:44px;
+        background:rgba(255,165,37,1);
+        border-radius:5px;
+        border:none;
+        font-size:16px;
+        font-family:PingFang SC;
+        font-weight:500;
+        color:rgba(255,255,255,1);
+    }
+    .van-cell{
+        padding:0;
+        font-size:16px;
+        color:#333;
+    }
+    .van-cell:not(:last-child)::after{
+        border:0;
+    }
+    .van-field__error-message{
+        position:absolute;
+        top:0px;
+        right:20px;
+    }
 }
 </style>
 <style lang="scss" scoped>
