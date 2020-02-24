@@ -159,7 +159,7 @@
                 <div class="remark-content">{{detailInfo.remark}}</div>
 
             </div>
-            <div class="link-btn">立即联系</div>
+            <div class="link-btn" @click="searchRightModelPhone(detailInfo.tel)">立即联系</div>
         </div>
 
     </van-popup>
@@ -282,6 +282,10 @@ export default {
  
   },
   methods:{ 
+      
+    searchRightModelPhone(tel){
+      window.location.href = "tel:" + tel
+    },
     getData(){
         this.$fetchGet("release/getPosition", this.query).then(res => {
         if (res.data.total){
