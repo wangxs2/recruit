@@ -603,7 +603,7 @@ export default {
 <style lang="scss">
 .jobEntry{
     .van-cell{
-        border-bottom:1px solid #eee;
+        // border-bottom:1px solid #eee;
         padding-left:0;
         padding-right:0;
     }
@@ -646,6 +646,7 @@ export default {
       align-items:center;
       padding-left:10px;
       padding-right:10px;
+      padding-bottom:2px;
       border-bottom:1px solid #eee;
       
       .require-icon{

@@ -151,14 +151,18 @@
                 </div>
                 <div class="people-tel">联系人：<span>{{detailInfo.contactName}}</span><span>{{detailInfo.tel}}</span></div>
                 <div class="address"><van-icon name="location-o" size="13" color="#666666"/>工作地点：{{detailInfo.province+detailInfo.city+detailInfo.entAddress}}</div>
-
-            </div>
-            <div class="remark-wrapper padding-top-bottom">
-                <div class="sub-title">备注</div>
+                
+                <div class="remark-title">备注</div>
                 
                 <div class="remark-content">{{detailInfo.remark}}</div>
 
             </div>
+            <!-- <div class="remark-wrapper padding-top-bottom">
+                <div class="sub-title">备注</div>
+                
+                <div class="remark-content">{{detailInfo.remark}}</div>
+
+            </div> -->
             <div class="link-btn" @click="searchRightModelPhone(detailInfo.tel)">立即联系</div>
         </div>
 
@@ -767,6 +771,21 @@ export default {
             font-size:13px;
             color:rgba(102,102,102,1);
             margin-top:13px;
+          }
+          .remark-title{
+            font-size:16px;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+            margin-top:20px;
+
+          }
+          .remark-content{
+            font-size:13px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+            line-height:22px;
+            margin-top:10px;
           }
       }
       .remark-wrapper{
