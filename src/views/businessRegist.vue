@@ -148,9 +148,10 @@
             <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
                     <van-uploader v-model="meedUrlArr"
-                    :after-read="imgRead" 
+                    :after-read="imgRead"
+                    :max-count="1" 
                     @delete="imgdelete">
-                        <div class="upload-img-icon">
+                        <div class="upload-img-icon" v-if="showimgsa">
                             <div class="upload-title">上传</div>
                         </div>
                     </van-uploader>
@@ -221,6 +222,7 @@ export default {
     ];
     return {
       showimg:false,
+      showimgsa:true,
       activeIcon: require('../assets/image/yes.png'), // 单选选中图片
       inactiveIcon: require('../assets/image/no.png'), //单选未选中图片
       allCity:json, // 省市数据
@@ -290,7 +292,7 @@ export default {
             let file = new window.File([rst.file], val.file.name, {
                 type: val.file.type
             }) //把blob转化成file
-                  this.uploadImg2(file)
+            this.uploadImg2(file)
               
           }).catch(error=> {
               //失败时执行
@@ -303,30 +305,33 @@ export default {
     
     //删除图片的回调
     imgdelete(val,detail){
-      if (this.meedUrlArr&&this.meedUrlArr.length){
+        this.showimgsa=true
+        this.form.qualiCertificate=''
+    //   if (this.meedUrlArr&&this.meedUrlArr.length){
         
-        this.$toast("图片删除成功");
-        this.meedUrlArr.splice(detail.index, 1)
-      
-      }
+    //     this.$toast("图片删除成功");
+    //     this.meedUrlArr.splice(detail.index, 1)
+        
+    //   }
     },
     //提供方录入身份证明
     uploadImg2 (file) {
-        
         this.showimg=true
         let currentFile=[]
         let formdata1 = new FormData();
-        formdata1.append('files', file.file);
+        formdata1.append('files', file);
         formdata1.append('uploadType', 'qualiCertificate');
         this.$fetchPostFile("enterprise/uploadFiles",formdata1).then(res=> {
             if (res.result==1){
                 // currentFile.push(res.data.paths)
-                
-               this.meedUrlArr.push(res.data.paths)
+                console.log(res.data.paths)
+                this.form.qualiCertificate=res.data.paths
+            //    this.meedUrlArr.push(res.data.paths)
                console.log(this.meedUrlArr)
 
             }            
             this.showimg=false
+            
             this.$toast(res.message);
         })
     },
@@ -348,7 +353,6 @@ export default {
       });
       geolocation.getCurrentPosition((status, result) => {
         if(status=='complete'){
-            console.log(result)
             this.form.entAddress=result.formattedAddress
         }else{
           this.$toast("获取当前位置失败");
@@ -430,8 +434,7 @@ export default {
     // 提交确认按钮
     goBackShow(){
         this.showimg=true
-        
-        this.form.qualiCertificate=this.meedUrlArr.join(",")
+        // this.form.qualiCertificate=this.meedUrlArr.join(",")
         this.form.entName=this.form.entFullname
         this.$fetchPost('enterprise/insert',this.form,"json").then(res => {
             this.showimg=false

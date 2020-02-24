@@ -255,7 +255,7 @@ export default {
     zhwList:[],
     query:{
         page:1,
-        pageSize:6,
+        pageSize:15,
         salary:-1,
         benefit:"",
         postId:"",
@@ -340,6 +340,7 @@ export default {
       this.onLoad();
     },
     chacontent(){
+        this.zhwList=[]
        this.query.page=1
         this.getData()
     },
