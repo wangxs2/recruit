@@ -48,6 +48,7 @@
             <!-- <van-icon name="location-o" size="18" color="#FFA525" @click="positionAddress"/> -->
         </div>
         <div class="input-wrapper">
+            <span class="require-icon1">-</span>
             <span class="label-title">企业类型</span>
             <van-field
             v-model="form.entType"
@@ -64,6 +65,7 @@
             </van-popup>
         </div>
         <div class="input-wrapper">
+            <span class="require-icon1">-</span>
             <span class="label-title">所属行业</span>
             <van-field
             v-model="form.industry"
@@ -79,6 +81,7 @@
             </van-popup> -->
         </div>
         <div class="input-wrapper">
+            <span class="require-icon1">-</span>
             <span class="label-title">企业规模</span>
             <van-field
             v-model="form.staffAmount"
@@ -115,6 +118,7 @@
             />
         </div>
         <div class="input-wrapper">
+            <span class="require-icon1">-</span>
             <span class="label-title">邮箱地址</span>
             <van-field
             v-model="form.emailAddress"
@@ -165,6 +169,7 @@
             </van-field>
         </div>
         <div class="input-wrapper input-deser">
+            <span class="require-icon1">-</span>
             <span class="label-title">备注</span>
             <van-field
             v-model="form.remark"
@@ -560,6 +565,12 @@ export default {
             .require-icon{
                 font-size:16px;
                 color:red;
+                padding-right:5px;
+            }
+            .require-icon1{
+                font-size:16px;
+                // color:#fff;
+                visibility:hidden;
                 padding-right:5px;
             }
             .radio-checked-img{
