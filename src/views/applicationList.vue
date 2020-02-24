@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="width:73px;text-align:center">
+                        <div style="width:83px;text-align:center">
                             <div><van-button style="width:63px;height:30px;line-height:30px" color="#FFA525">联系</van-button></div>
                             <div style="color:#999999;font-size:13px;margin-top:8px">{{timeago(item.inputTime)}}发布</div>
                         </div>
