@@ -9,15 +9,16 @@
       <div class="content"></div>
       <div class="content-bottom">
         <div class="feihua">
-          <div style="color:#222222;font-size:23px">全联人才服务平台</div>
-          <div  style="color:#666666;font-size:14px;margin-top:6px">加强人才交流培养，服务民营经济发展</div>
+          <div style="color:#222222;font-size:23px">企业复工复产人才供需平台</div>
+          <div  style="color:#666666;font-size:14px;margin-top:6px">助力复工复产 服务民营经济</div>
         </div>
         <div class="btn">
-          <div class="btn-small" style="margin-right:30px" @click="$router.push('/businessRegist')">我要招人</div>
-          <div class="btn-small" @click="$router.push('/applicationList')">我要应聘</div>
+          <div class="btn-small" style="margin-right:30px" @click="$router.push('/businessRegist')">我要招聘</div>
+          <div class="btn-small" @click="$router.push('/applicationList')">我要求职</div>
         </div>
       </div>
     </div>
+    <div class="tel">咨询热线：010-62350535</div>
   </div>
 </template>
 
@@ -92,6 +93,16 @@ export default {
       }
       
     }
+  }
+  .tel{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:44px;
+    line-height:44px;
+    text-align:center;
+    font-size:14px;
   }
 }
 </style>
