@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div class="tel">咨询热线：010-62350535</div>
+    <div class="tel" style="color:rgba(255,165,37,1)">咨询热线：010-62350535</div>
   </div>
 </template>
 
