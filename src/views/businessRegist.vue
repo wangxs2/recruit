@@ -147,7 +147,7 @@
             <span class="label-title">营业执照</span>
             <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
-                    <van-uploader v-model="meedUrlArr" multiple 
+                    <van-uploader v-model="meedUrlArr"
                     :after-read="imgRead" 
                     @delete="imgdelete">
                         <div class="upload-img-icon">
@@ -179,8 +179,8 @@
         <div class="submit-wrapper">
             <div class="title">您确认提交吗？</div>
             <div class="btn-wrapper">
-                <div class="btn go-back" @click="goBackShow">离开</div>
-                <div class="btn" @click="cancleShow">取消</div>
+                <div class="btn go-back" @click="goBackShow">确认</div>
+                <div class="btn" @click="show=false">取消</div>
             </div>
         </div>
     </div>      
@@ -191,10 +191,17 @@
             <div class="title1"><img src="../assets/image/jinggao.png"/>离开信息将需要全部重新填写</div>
             <div class="btn-wrapper">
                 <div class="btn go-back1" @click="goBackShow1">离开</div>
-                <div class="btn go-back2" @click="cancleShow1">继续填写</div>
+                <div class="btn go-back2" @click="show1=false">继续填写</div>
             </div>
         </div>
     </div> 
+    
+    <!-- 防止过快的切换 -->
+    <van-overlay :z-index="30" :show="showimg">
+      <div class="wrapperfast" >
+        <van-loading size="64px" color="#1989fa"></van-loading>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -213,6 +220,7 @@ export default {
       { required: false, message: '请上传营业执照'},
     ];
     return {
+      showimg:false,
       activeIcon: require('../assets/image/yes.png'), // 单选选中图片
       inactiveIcon: require('../assets/image/no.png'), //单选未选中图片
       allCity:json, // 省市数据
@@ -274,74 +282,52 @@ export default {
   methods:{ 
       
     imgRead(val){
-        // let selectImg=[]
-        // this.showimg=true
-        // if (val&&!Array.isArray(val)){   
-        //   val=[val]
-
-        // }
-        
-        // val.forEach(item => {
-        //   let obj={}
-        //   lrz(item.file, {
-        //     quality: 0.2    //自定义使用压缩方式
-        //   })  
-        //   .then(rst=> {
-        //       //成功时执行
-        //     let file = new window.File([rst.file], item.file.name, {
-        //         type: item.file.type
-        //     }) //把blob转化成file
-        //     let reader = new FileReader();    //html5读文件
-
-        //     reader.readAsDataURL(file); //转BASE64 
-        //     let that=this
-        //     reader.onload = function (e) {        //读取完毕后调用接口
-
-        //       obj={
-        //         ImgByte: e.target.result
-        //       }
-        //       selectImg.push(obj)
-        //       if(val.length>0&&val.length==selectImg.length){
-                //   that.uploadImg2(selectImg)
-                  this.uploadImg2(val)
-        //         }
-        //     }
-
+          lrz(val.file, {
+            quality: 0.2    //自定义使用压缩方式
+          })  
+          .then(rst=> {
+               //成功时执行
+            let file = new window.File([rst.file], val.file.name, {
+                type: val.file.type
+            }) //把blob转化成file
+                  this.uploadImg2(file)
               
-        //   }).catch(error=> {
-        //       //失败时执行
-        //   }).always(()=> {
+          }).catch(error=> {
+              //失败时执行
+          }).always(()=> {
         
-        //       //不管成功或失败，都会执行
-        //   })
-        // })
+              //不管成功或失败，都会执行
+          })
 
     },
     
     //删除图片的回调
     imgdelete(val,detail){
-    //   if (this.meedUrlArr2&&this.meedUrlArr2.length){
-    //     this.meedUrlArr2.forEach(item => {
-
-    //       item=item.split(',')
-    //     })
-    //     this.meedUrlArr2 = (this.meedUrlArr2 + '').split(',');
-    //     this.meedUrlArr2 = this.meedUrlArr2.toString().split(',');
-    //     this.meedUrlArr2 = this.meedUrlArr2.join().split(',');
+      if (this.meedUrlArr&&this.meedUrlArr.length){
         
-    //     this.$toast("图片删除成功");
-    //     this.meedUrlArr2.splice(detail.index, 1)
+        this.$toast("图片删除成功");
+        this.meedUrlArr.splice(detail.index, 1)
       
-    //   }
+      }
     },
     //提供方录入身份证明
     uploadImg2 (file) {
-        console.log(file)
+        
+        this.showimg=true
+        let currentFile=[]
         let formdata1 = new FormData();
         formdata1.append('files', file.file);
+        formdata1.append('uploadType', 'qualiCertificate');
         this.$fetchPostFile("enterprise/uploadFiles",formdata1).then(res=> {
+            if (res.result==1){
+                // currentFile.push(res.data.paths)
+                
+               this.meedUrlArr.push(res.data.paths)
+               console.log(this.meedUrlArr)
+
+            }            
+            this.showimg=false
             this.$toast(res.message);
-            this.form.qualiCertificate=res.data.paths
         })
     },
     positionAddress(){
@@ -373,30 +359,17 @@ export default {
       return /^[\d\-]+$/g.test(val);
     },
     onClickLeft(){
-      this.$router.push("/")
+        this.show1=true
     },
     // 提交表单成功按钮
     onSubmit(values) {
-        this.form.entName=this.form.entFullname
-      console.log('submit', values);
-      this.$fetchPost('enterprise/insert',this.form,"json").then(res => {
-          console.log(res)
-          if(res.result==1){
-              this.$store.state.companymsg=res.data
-              this.$router.push("/submitSucess")
-          }else{
-              this.$toast(res.message)
-          }
-
-      })
+        this.show=true
     },
     // 提交表单失败按钮
     onFailed(values){
         this.$toast("请填写完整信息")
-      console.log('failed', values);
     },
     onConfirm(value){
-        console.log(value)
         this.proCity=value[0].text+value[1].text
         this.showPicker=false
         this.form.province=value[0].text
@@ -454,21 +427,26 @@ export default {
         })
         return x
     },
-    // 提交离开按钮
+    // 提交确认按钮
     goBackShow(){
-
-    },
-    // 提交取消按钮
-    cancleShow(){
-
+        this.showimg=true
+        
+        this.form.qualiCertificate=this.meedUrlArr.join(",")
+        this.form.entName=this.form.entFullname
+        this.$fetchPost('enterprise/insert',this.form,"json").then(res => {
+            this.showimg=false
+            if(res.result==1){
+                this.$store.state.companymsg=res.data
+                this.$router.push("/submitSucess")
+            }
+            this.show=false
+            this.$toast(res.message)
+        })
     },
     // 离开信息登记按钮
     goBackShow1(){
-
-    },
-    // 继续信息登记按钮
-    cancleShow1(){
-
+      this.show1=false
+      this.$router.push("/")
     },
   }
 };
@@ -578,7 +556,7 @@ export default {
         }
     }
     .model-wrapper{
-        position:absolute;
+        position:fixed;
         top:0;
         left:0;
         bottom:0;
@@ -587,7 +565,7 @@ export default {
         justify-content:center;
         align-items:center;
         background:rgba(0,0,0,.5);
-        z-index:10;
+        z-index:99;
         .submit-wrapper{
             display:flex;
             flex-direction:column;
@@ -651,6 +629,13 @@ export default {
             }
         }
 
+    }
+    
+    .wrapperfast{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
     }
 
 }
