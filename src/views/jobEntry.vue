@@ -10,6 +10,8 @@
     </van-nav-bar>
     <div class="detail">
       <van-form label-align="right" validate-first scroll-to-error @submit="onSubmit" @failed="onFailed">
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
         readonly
         clickable
@@ -30,7 +32,10 @@
             @cancel="showPicker = false"
         />
         </van-popup>
-
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
         readonly
         clickable
@@ -50,7 +55,10 @@
             @cancel="showPicker1 = false"
         />
         </van-popup>
+        </div>
         
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
           readonly
         clickable
@@ -63,7 +71,10 @@
           :rules="[{ required: true, message: '请填写月薪' }]"
         />
         <van-action-sheet v-model="showPicker2" :actions="actions" @select="onSelect" />
-
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
         readonly
         clickable
@@ -89,6 +100,10 @@
             
          </div>
         </van-popup>
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
           v-model="addForm.recruitNum"
           name="招聘人数"
@@ -96,7 +111,10 @@
           placeholder="招聘人数"
           :rules="[{ required: true, message: '请填写招聘人数' }]"
         />
-
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
           v-model="addForm.postDscrpt"
           name="职位描述"
@@ -105,7 +123,10 @@
           placeholder="例如工作内容、职位要求等"
           :rules="[{ required: true, message: '请填写职位描述' }]"
         />
-
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field name="addForm.workHour" label="工作时间">
              <template #input>
                 <van-radio-group v-model="addForm.workHour" direction="horizontal">
@@ -115,6 +136,10 @@
             </template>
 
         </van-field>
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field name="addForm.workShift" label="工作班制">
              <template #input>
                 <van-radio-group v-model="addForm.workShift" direction="horizontal">
@@ -124,7 +149,10 @@
             </template>
 
         </van-field>
-
+        </div>
+          
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
          <van-field
           readonly
           clickable
@@ -137,6 +165,10 @@
           :rules="[{ required: true, message: '请填写年龄要求' }]"
         />
         <van-action-sheet v-model="showPicker7" :actions="actions3" @select="onSelect3" />
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
          <van-field
             readonly
             clickable
@@ -149,7 +181,11 @@
             @click="showPicker6 = true"
             />
             <van-action-sheet v-model="showPicker6" :actions="actions1" @select="onSelect1" />
+        </div>
 
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
         <van-field
             readonly
             clickable
@@ -162,6 +198,10 @@
             @click="showPicker5 = true"
             />
             <van-action-sheet v-model="showPicker5" :actions="actions2" @select="onSelect2" />
+          </div>
+          
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
           <van-field
           v-model="addForm.entAddress"
           name="工作地点"
@@ -169,6 +209,10 @@
           placeholder="工作地点"
           :rules="[{ required: true, message: '请填写工作地点' }]"
         />
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
           <van-field
           v-model="addForm.contactPpl"
           name="联 系 人"
@@ -176,6 +220,10 @@
           placeholder="联系人"
           :rules="[{ required: true, message: '请填写联系人' }]"
         />
+        </div>
+        
+        <div class="input-wrapper">
+        <span class="require-icon">*</span>
           <van-field
           v-model="addForm.contactTel"
           name="联系电话"
@@ -183,6 +231,7 @@
           placeholder="联系电话"
           :rules="[{ required: true, message: '请填写联系电话' }]"
         />
+        </div>
        
         <div style="margin-top:30px">
           <van-grid :column-num="submitArr.length>0&&this.idIndex>0?3:numsa">
@@ -555,6 +604,8 @@ export default {
 .jobEntry{
     .van-cell{
         border-bottom:1px solid #eee;
+        padding-left:0;
+        padding-right:0;
     }
     .van-cell:not(:last-child)::after{
         border:0;
@@ -589,6 +640,19 @@ export default {
     flex-direction: column;
     overflow: hidden;
     overflow-y: scroll;
+    .input-wrapper{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding-left:10px;
+      padding-right:10px;
+      border-bottom:1px solid #eee;
+      
+      .require-icon{
+          color:red;
+          font-size:16px;
+      }
+    }
     
   }
   .diosa{

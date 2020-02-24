@@ -141,12 +141,12 @@
                 </div>
                 <div class="compony-content">
                     <div class="content-left">
-                        <span class="compony-type">{{detailInfo.entType}}</span>
-                        <span class="compony-num">{{detailInfo.staffAmount}}</span>
+                        <span class="compony-type" v-if="detailInfo.entType">{{detailInfo.entType}}</span>
+                        <span class="compony-num" v-if="detailInfo.staffAmount">{{detailInfo.staffAmount}}</span>
                     </div>
                     <div class="content-right">
                         <span>在招职位 {{detailInfo.recruitNum}}个</span>
-                        <van-icon name="arrow" />
+                        <!-- <van-icon name="arrow" /> -->
                     </div>
                 </div>
                 <div class="people-tel">联系人：<span>{{detailInfo.contactName}}</span><span>{{detailInfo.tel}}</span></div>

@@ -10,6 +10,7 @@
     <div class="form-wrapper">
       <van-form @submit="onSubmit" @failed="onFailed">
         <div class="input-wrapper">
+            <span class="require-icon">*</span>
             <span class="label-title">所在省市</span>
             <van-field
             v-model="proCity"
@@ -26,6 +27,7 @@
             </van-popup>
         </div>
         <div class="input-wrapper">
+            <span class="require-icon">*</span>
             <span class="label-title">企业名称</span>
             <van-field
             v-model="form.entFullname"
@@ -35,6 +37,7 @@
             />
         </div>
         <div class="input-wrapper">
+            <span class="require-icon">*</span>
             <span class="label-title">企业地址</span>
             <van-field
             v-model="form.entAddress"
@@ -51,7 +54,7 @@
             name="entType"
             readonly
             placeholder="企业类型"
-            :rules="[{ required: true, message: '请选择企业类型' }]"
+            :rules="[{ required: false, message: '请选择企业类型' }]"
              @click="showPicker1 = true"
             />
             <van-icon name="arrow" size="16"/>
@@ -66,7 +69,7 @@
             v-model="form.industry"
             name="industry"
             placeholder="所属行业"
-            :rules="[{ required: true, message: '请填写所属行业' }]"
+            :rules="[{ required: false, message: '请填写所属行业' }]"
             />
              <!-- @click="showPicker2 = true"
             <van-icon name="arrow" size="16"/>
@@ -82,7 +85,7 @@
             readonly
             name="staffAmount"
             placeholder="企业规模"
-            :rules="[{ required: true, message: '请选择企业规模' }]"
+            :rules="[{ required: false, message: '请选择企业规模' }]"
              @click="showPicker3 = true"
             />
             <van-icon name="arrow" size="16"/>
@@ -92,6 +95,7 @@
             </van-popup>
         </div>
         <div class="input-wrapper">
+            <span class="require-icon">*</span>
             <span class="label-title">联系人</span>
             <van-field
             v-model="form.contactName"
@@ -101,6 +105,7 @@
             />
         </div>
         <div class="input-wrapper">
+            <span class="require-icon">*</span>
             <span class="label-title">联系电话</span>
             <van-field
             v-model="form.tel"
@@ -115,7 +120,7 @@
             v-model="form.emailAddress"
             name="emailAddress"
             placeholder="邮箱地址"
-            :rules="[{ required: true, message: '请填写邮箱地址' }]"
+            :rules="[{ required: false, message: '请填写邮箱地址' }]"
             />
         </div>
         <!-- <div class="input-wrapper">
@@ -144,6 +149,7 @@
             </van-field>
         </div> -->
         <div class="input-wrapper upload-img">
+            <span class="require-icon">*</span>
             <span class="label-title">营业执照</span>
             <van-field name="qualiCertificate" :rules="uploadImgRules">
                 <template #input>
@@ -544,12 +550,17 @@ export default {
                 padding:17px 13px;
             }
             .label-title{
-                width: 70px;
+                width: 80px;
                 font-size:16px;
                 font-family:PingFang SC;
                 font-weight:500;
                 color:rgba(102,102,102,1);
                 margin-right:12px;
+            }
+            .require-icon{
+                font-size:16px;
+                color:red;
+                padding-right:5px;
             }
             .radio-checked-img{
                 width:17px;
