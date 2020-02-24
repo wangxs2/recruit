@@ -9,15 +9,27 @@
     </van-nav-bar>
     <div class="searchrow">
         <div class="sanjiao" @click="showPicker=true"><span style="margin-right:10px;font-size:15px">{{query.city==''?"城市":query.city}}</span><div class="zj-topleft"></div></div>
-        <div> 
+        <div style="flex:1;margin-left:10px"> 
             <van-search
-            v-model="value"
+            v-model="query.content"
             shape="round"
             background="#ffffff"
+            @blur="chacontent"
             placeholder="输入企业/岗位名称"
             />
         </div>
-        <div class="dwnum" @click="shaixuan=true"><van-icon name="filter-o" />筛选 <div class="num" v-if="this.query.salary!==-1">1</div></div>
+        <!-- <div class="dwnum" @click="shaixuan=true"><van-icon name="filter-o" />筛选 <div class="num" v-if="this.query.salary!==-1">1</div></div> -->
+    </div>
+    <div class="shainum">
+        <van-dropdown-menu>
+            <van-dropdown-item @change="chacontent" v-model="query.salary" :options="option1" />
+             <van-dropdown-item @change="chacontent1" v-model="valuesa" :options="option2" />
+            <!-- <van-dropdown-item title="福利待遇" ref="item">
+                <van-switch-cell v-model="switch1" title="包邮" />
+                <van-switch-cell v-model="switch2" title="团购" />
+                <van-button block type="info" @click="onConfirm">确认</van-button>
+            </van-dropdown-item> -->
+        </van-dropdown-menu>
     </div>
     <div class="detail">
         <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -38,19 +50,35 @@
                     <div class="two-list"> 
                         <span>上海</span><span>{{item.workExperience}}</span><span>{{item.minEducation=="high"?'高中及以上':item.minEducation=="junior"?'大专及以上':item.minEducation=="college"?'本科及以上':item.minEducation=="middle"?'初中及以上':'不限'}}</span>
                     </div>
-                    <div class="three-list">
-                        <span v-for="(iteam,index) in item.fulidar" :key="index">{{iteam}}</span>
+                    <div class="cbigbox">
+                        <div style="flex:1">
+                            
+                            <div class="three-list">
+                                <span v-for="(iteam,index) in item.fulidar" :key="index" v-if="iteam!==''">{{iteam}}</span>
+                            </div>
+                            <div class="qiye">
+                                <img width="30" height="30" src="../assets/image/youyanse.png">
+                                <div style="margin-left:6px">
+                                    <div class="five-list">
+                                        <div style="margin:0 4px">{{item.contactPpl}}</div>
+                                        <div>{{item.contactTel}}</div>
+                                    </div>
+                                    <div class="four-list">
+                                        
+                                        <div style="margin:0 4px">{{item.entName}}</div>
+                                        <div v-if="item.isVerify!==0" class="recompy">认证企业</div>
+                                        <div v-if="item.isVerify==0" class="recompy recompy1">未认证</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width:73px;text-align:center">
+                            <div><van-button style="width:63px;height:30px;line-height:30px" color="#FFA525">联系</van-button></div>
+                            <div style="color:#999999;font-size:13px;margin-top:8px">{{timeago(item.inputTime)}}发布</div>
+                        </div>
+
                     </div>
-                    <div class="five-list">
-                        <van-icon color="#FFA525" name="phone" />
-                        <div style="margin:0 4px">{{item.contactPpl}}</div>
-                        <div>{{item.contactTel}}</div>
-                    </div>
-                    <div class="four-list">
-                        <img width="30" height="30" src="../assets/image/youyanse.png">
-                        <div style="margin:0 4px">{{item.entName}}</div>
-                        <div class="recompy">认证企业</div>
-                    </div>
+                    
                 </div>
                 
             </div> 
@@ -183,10 +211,25 @@ export default {
         { text: '期望薪资', value: -1 },
       ],
       option2: [
-        { text: '默认排序', value: 'a' },
-        { text: '好评排序', value: 'b' },
-        { text: '销量排序', value: 'c' },
+        { text: '五险一金', value: 1 },
+        { text: '包吃', value: 2 },
+        { text: '包住', value: 3 },
+        { text: '加班补助', value: 4 },
+        { text: '周末双休', value: 5 },
+        { text: '年底双薪', value: 6},
+        { text: '员工旅游', value: 7 },
+        { text: '带薪年假', value: 8 },
+        { text: '年终分红', value: 9 },
+        { text: '绩效奖', value: 10 },
+        { text: '免费班车', value: 11},
+        { text: '节日福利', value: 12 },
+        { text: '弹性工作', value: 13 },
+        { text: '定期体检', value: 14 },
+        { text: '福利待遇', value: '' },
       ],
+      valuesa:'',
+    switch1: false,
+    switch2: false,
     showDetail:false,
     shaixuan:false,
     columns:[
@@ -214,11 +257,12 @@ export default {
     zhwList:[],
     query:{
         page:1,
-        pageSize:10,
+        pageSize:6,
         salary:-1,
         benefit:"",
         postId:"",
         city:'',
+        content:'',
         entId:""
     },
     }
@@ -296,6 +340,18 @@ export default {
       this.finished = false // 不写这句会导致你上拉到底过后在下拉刷新将不能触发下拉加载事件
       this.onLoad();
     },
+    chacontent(){
+       this.query.page=1
+        this.getData()
+    },
+    chacontent1(val){
+        this.query.page=1
+        let user = this.option2.find((user)=>{
+            return user.value === val
+        })
+        this.query.benefit=user.text
+        this.getData()
+    },
     goDetail(row){
         this.showDetail=true
     },
@@ -350,6 +406,9 @@ export default {
     .van-pull-refresh{
         overflow-y: scroll;
     }
+    .van-search{
+        padding:0px;
+    }
 }
 
 </style>
@@ -357,7 +416,7 @@ export default {
 .applicationList {
   width: 100%;
   height: 100%;
-//   overflow: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background:#f5f4f7;
@@ -415,7 +474,7 @@ export default {
     background:#ffffff;
     display: flex;
     font-size:13px;
-    justify-content:space-between;
+    justify-content:flex-start;
     align-items:center;
     box-sizing:border-box;
     padding: 0 14px;
@@ -453,7 +512,7 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
-    // overflow: hidden;
+    overflow: hidden;
     overflow-y: scroll;
     .iteam-box{
         background:#ffffff;
@@ -461,6 +520,11 @@ export default {
         font-size:16px;
         box-sizing:border-box;
         padding:12px;
+        .cbigbox{
+           display: flex;
+           justify-content:space-between;
+        //    align-items:center;
+        }
         .one-list{
            display: flex;
            justify-content:space-between;
@@ -468,7 +532,7 @@ export default {
            margin-bottom:6px;
         }
         .two-list{
-            margin-bottom:6px;
+            margin-bottom:2px;
             span{
                 font-size:14px;
                 color:#666666;
@@ -490,6 +554,11 @@ export default {
                 padding:3px 6px;
             }
         }
+        .qiye{
+            display: flex;
+            align-items:center;
+           justify-content:flex-start;
+        }
         .four-list{
             
            display: flex;
@@ -503,6 +572,10 @@ export default {
                font-size:10px;
                box-sizing:border-box;
                border-radius:3px;
+           }
+           .recompy1{
+               border:1px solid #AAAAAA;
+               color:#999999;
            }
         }
         .five-list{

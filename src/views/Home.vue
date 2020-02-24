@@ -10,7 +10,7 @@
       <div class="content-bottom">
         <div class="feihua">
           <div style="color:#222222;font-size:23px">全联人才服务平台</div>
-          <div  style="color:#666666;font-size:14px">加强人才交流培养，服务民营经济发展</div>
+          <div  style="color:#666666;font-size:14px;margin-top:6px">加强人才交流培养，服务民营经济发展</div>
         </div>
         <div class="btn">
           <div class="btn-small" style="margin-right:30px" @click="$router.push('/businessRegist')">我要招人</div>

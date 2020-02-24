@@ -1,6 +1,9 @@
 import axios from 'axios'
 import router from '../router/index'
 import qs from 'qs'
+import Vue from 'vue';
+import { Notify } from 'vant';
+Vue.use(Notify);
 
 // 创建axios实例
 export const Axios = axios.create({
@@ -37,7 +40,12 @@ Axios.interceptors.response.use(
         //401 登录过期 返回登录
         case 401:
           router.push('/')
-
+          Notify({ type: 'warning', message: '暂无权限！' });
+          break;
+        //401 登录过期 返回登录
+        case 404:
+          router.push('/')
+          Notify({ type: 'warning', message: '暂无服务，请稍后重试！' });
           break;
       }
     } else {

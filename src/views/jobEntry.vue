@@ -224,6 +224,7 @@ export default {
             { text: '温州', children: [{ text: '鹿城区' }, { text: '瓯海区' }] }] },
             { text: '福建', children: [{ text: '福州', children: [{ text: '鼓楼区' }, { text: '台江区' }] }, { text: '厦门', children: [{ text: '思明区' }, { text: '海沧区' }] }] }],
     addForm:{
+      isVerify:'',//企业认证
         posttypeid:'',//  职位类别id
         posttypeName:'',//  职位类别名称
         postName:'',//  职位名称
@@ -327,7 +328,8 @@ export default {
         this.addForm.entAddress=this.compayObj.entAddress
         this.addForm.contactPpl=this.compayObj.contactName
         this.addForm.entId=this.compayObj.id
-        this.addForm.contactTel=this.compayObj.tel
+        this.addForm.contactTel=this.compayObj.tel  
+        this.addForm.isVerify=this.compayObj.isVerify
       }
     }
   },
@@ -391,6 +393,7 @@ export default {
     //清空表单
     emptyForm(){
         this.addForm={
+        isVerify:this.compayObj.isVerify,//企业认证
         posttypeid:'',//  职位类别id
         posttypeName:'',//  职位类别名称
         postName:'',//  职位名称
@@ -640,7 +643,7 @@ export default {
         color:rgba(51,51,51,1);
         .fuli-itam{
             box-sizing:border-box;
-            padding:4px 10px;
+            padding:8px 12px;
             border:1px solid #E9E9E9;
             border-radius:6px;
             margin-bottom:14px;
