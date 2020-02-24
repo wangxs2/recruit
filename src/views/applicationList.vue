@@ -101,64 +101,62 @@
         </van-nav-bar>
         <div class="detail-wrapper">
             <div class="job-wrapper padding-top-bottom">
-                <div class="title">普通操作工</div>
-                <div class="job-content">经验不限 | 学历不限 | 18-45周岁 | 8h/26天 | 三班倒</div>
-                <div class="address"><van-icon name="location-o" size="12"/>工作地点：贵州省凯里市炉碧开发区</div>
+                <div class="title">{{detailInfo.postName}}</div>
+                <div class="job-content"><span>{{detailInfo. workExperience}}</span> | <span>{{detailInfo.minEducation=="high"?'高中及以上':detailInfo.minEducation=="junior"?'大专及以上':detailInfo.minEducation=="college"?'本科及以上':detailInfo.minEducation=="middle"?'初中及以上':'不限'}}</span> | <span>{{detailInfo.ageRange}}</span> | <span>{{detailInfo.workHour}}</span> | <span>{{detailInfo.workShift}}</span></div>
+                <div class="address"><van-icon name="location-o" size="12"/>工作地点：{{detailInfo.province+detailInfo.city+detailInfo.entAddress}}</div>
                 <div class="money-people">
-                    <span class="money">3000-5000/月</span>
-                    <span class="people">招聘15人</span>
+                    <span class="money">{{detailInfo.salary}}/月</span>
+                    <span class="people">招聘{{detailInfo.recruitNum}}人</span>
                 </div>
             </div>
             <div class="fuli-wrapper padding-top-bottom">
                 <div class="sub-title">福利待遇</div>
                 <div class="fuli-list">
-                    <span>哈哈哈</span>
-                    <span>哈哈哈</span>
+                    <span v-for="(iteam,index) in detailInfo.fulidar" :key="index">{{iteam}}</span>
                 </div>
 
             </div>
             <div class="job-desc-wrapper padding-top-bottom">
                 <div class="sub-title">职位描述</div>
                 <div class="job-desc-list">
-                    <span>哈哈哈</span>
-                    <span>哈哈哈</span>
+                    <span>{{detailInfo.postDscrpt}}</span>
                 </div>
-                <div class="show-job-detail" @click="showJobAll">展开</div>
+                <!-- <div class="show-job-detail" @click="showJobAll">展开</div> -->
             </div>
             <div class="link-people-tel padding-top-bottom">
                 <img src="../assets/image/icon-com-1.png"/> 
                 <div class="people-tel">
                     <div class="content">
-                        <span>徐先生</span>
-                        <span>13256487956</span>
+                        <span>{{detailInfo.contactName}}</span>
+                        <span>{{detailInfo.tel}}</span>
                     </div>
-                    <span class="compony-title">贵州其亚铝业有限公司</span>
+                    <span class="compony-title">{{detailInfo.province+detailInfo.city+detailInfo.entAddress}}</span>
                 </div>
             </div>
             <div class="compony-info-wrapper padding-top-bottom">
                 <div class="sub-title">企业信息</div>
                 <div class="compony-title">
-                   <span>贵州其亚铝业有限公司</span>
-                   <span>认证企业</span>
+                   <span>{{detailInfo.entName}}</span>
+                   <span>{{detailInfo.isVerify==1?'认证企业':'未认证企业'}}</span>
                 </div>
                 <div class="compony-content">
                     <div class="content-left">
-                        <span class="compony-type">合资</span>
-                        <span class="compony-num">1000人以上</span>
+                        <span class="compony-type">{{detailInfo.entType}}</span>
+                        <span class="compony-num">{{detailInfo.staffAmount}}</span>
                     </div>
                     <div class="content-right">
-                        <span>在招职位 6个</span>
+                        <span>在招职位 {{detailInfo.recruitNum}}个</span>
                         <van-icon name="arrow" />
                     </div>
                 </div>
-                <div class="people-tel">联系人：<span>徐先生</span><span>13256487956</span></div>
-                <div class="address"><van-icon name="location-o" size="13" color="#666666"/>工作地点：贵州省凯里市炉碧开发区</div>
+                <div class="people-tel">联系人：<span>{{detailInfo.contactName}}</span><span>{{detailInfo.tel}}</span></div>
+                <div class="address"><van-icon name="location-o" size="13" color="#666666"/>工作地点：{{detailInfo.province+detailInfo.city+detailInfo.entAddress}}</div>
 
             </div>
             <div class="remark-wrapper padding-top-bottom">
                 <div class="sub-title">备注</div>
                 
-                <div class="remark-content">企业建立于2018年8月15日，属内资私企，建筑面积为 20000m2 。目前在职员工已超过7000人。秉承“诚信、谦 虚、勤</div>
+                <div class="remark-content">{{detailInfo.remark}}</div>
 
             </div>
             <div class="link-btn">立即联系</div>
@@ -265,6 +263,7 @@ export default {
         content:'',
         entId:""
     },
+    detailInfo:{}, // 列表详情
     }
   },
   created() {
@@ -353,6 +352,8 @@ export default {
         this.getData()
     },
     goDetail(row){
+        console.log(row)
+        this.detailInfo=row
         this.showDetail=true
     },
     showJobAll(){
