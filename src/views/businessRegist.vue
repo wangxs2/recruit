@@ -218,7 +218,7 @@ export default {
       { validator: this.phoneValidator, message: '手机号格式错误' },
     ];
     this.uploadImgRules = [
-      { required: false, message: '请上传营业执照'},
+      { required: true, message: '请上传营业执照'},
     ];
     return {
       showimg:false,
@@ -307,6 +307,7 @@ export default {
     imgdelete(val,detail){
         this.showimgsa=true
         this.form.qualiCertificate=''
+        this.meedUrlArr=[]
     //   if (this.meedUrlArr&&this.meedUrlArr.length){
         
     //     this.$toast("图片删除成功");
@@ -324,10 +325,8 @@ export default {
         this.$fetchPostFile("enterprise/uploadFiles",formdata1).then(res=> {
             if (res.result==1){
                 // currentFile.push(res.data.paths)
-                console.log(res.data.paths)
                 this.form.qualiCertificate=res.data.paths
             //    this.meedUrlArr.push(res.data.paths)
-               console.log(this.meedUrlArr)
 
             }            
             this.showimg=false
