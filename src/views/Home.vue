@@ -9,7 +9,7 @@
       <div class="content"></div>
       <div class="content-bottom">
         <div class="feihua">
-          <div style="color:#222222;font-size:23px">企业复工复产人才供需平台</div>
+          <div style="color:#222222;font-size:21px">企业复工复产人才供需平台</div>
           <div  style="color:#666666;font-size:14px;margin-top:6px">助力复工复产 服务民营经济</div>
         </div>
         <div class="btn">
@@ -39,6 +39,9 @@ export default {
  
   },
   methods:{ 
+    searchRightModelPhone(tel){
+      window.location.href = "tel:" + tel
+    },
     onClickLeft(){
 
     }
