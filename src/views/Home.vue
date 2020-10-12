@@ -18,7 +18,8 @@
         </div>
       </div>
     </div>
-    <div class="tel" style="color:rgba(255,165,37,1)">咨询热线：010-62350535</div>
+    <!-- <div class="tel" style="color:rgba(255,165,37,1)">咨询热线：010-62350535</div> -->
+    <div class="tel">版权所有2020 上海产业技术研究院浙江创新院   <a href="http://www.beian.miit.gov.cn/">浙ICP备19035850号</a></div>
   </div>
 </template>
 
@@ -99,13 +100,15 @@ export default {
   }
   .tel{
     position:absolute;
-    bottom:0;
+    bottom:16px;
     left:0;
     right:0;
     height:44px;
-    line-height:44px;
+    // line-height:44px;
+    box-sizing: border-box;
+    padding: 0 6px;
     text-align:center;
-    font-size:14px;
+    font-size:12px;
   }
 }
 </style>
